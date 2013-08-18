@@ -60,9 +60,9 @@ namespace wfFileInventory
         {
             if (root.Items.Count > 0)
             {
-                foreach (wfNode<DirInfo> item in root.Items.OrderByDescending(t=>t.Value.Name))
+                foreach (wfNode<DirInfo> item in root.Items.OrderBy(t=>t.Value.Name))
                 {
-                    TreeNode treenode = start.Nodes.Add(item.Value.Name);
+                    TreeNode treenode = start.Nodes.Add(item.Value.Name+" ["+item.Value.TotalWeight.ToString()+"]");
                     CopyVirtualBranch(treenode, item);
                 }
             }
@@ -72,15 +72,33 @@ namespace wfFileInventory
         {
             DirectoryInfo di = new DirectoryInfo(path);
             IEnumerable<String> dirs = di.EnumerateDirectories().Select(t => t.Name);
+            InitializeDirInfo(ref root.Value, path);
             foreach (string dir in dirs)
             {
 //                TreeNode node = start.Nodes.Add(dir);
                 wfNode<DirInfo> item = new wfNode<DirInfo>(root);
                 item.Value.Name = dir;
+                string full_path = path + "\\" + dir;
                 root.Items.Add(item); 
-                PopulateDirectoryBranch(path + "\\" + dir, item);
+                PopulateDirectoryBranch(full_path, item);
+                root.Value.SubWeight += item.Value.TotalWeight;
             }
-        } 
+            root.Value.TotalWeight = root.Value.OwnWeight + root.Value.SubWeight;
+        }
 
+        private void InitializeDirInfo(ref DirInfo di, string path)
+        {
+            DirectoryInfo _dirinfo = new DirectoryInfo(path);
+            IEnumerable<FileInfo> files = _dirinfo.EnumerateFiles();
+            Int32 _count = 0;
+            long _weight = 0;
+            foreach (FileInfo file in files)
+            {
+                _count++;
+                _weight += file.Length;
+            }
+            di.FileCount = _count;
+            di.OwnWeight = _weight;
+        }
     }
 }

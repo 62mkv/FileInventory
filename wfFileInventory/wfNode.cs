@@ -18,8 +18,9 @@ namespace wfFileInventory
     public struct DirInfo 
     { 
         public string Name;
-        public Int32 OwnWeight;
-        public Int32 SubWeight;
+        public long OwnWeight;
+        public long SubWeight;
+        public long TotalWeight;
         public Int32 FileCount;
     }
 
