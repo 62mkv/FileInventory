@@ -33,9 +33,7 @@ namespace wfFileInventory
 
         private void bStartScan_Click(object sender, EventArgs e)
         {
-            /*TreeNode root=tvInventory.Nodes.Add("Root");
-            root.Nodes.Add("Child1");
-             */
+            
             try
             {
 
@@ -44,23 +42,45 @@ namespace wfFileInventory
                 {
                     TreeNode root = tvInventory.Nodes.Add(di.FullName);
                     
-                    PopulateDirectoryBranch(tbFolderPath.Text, root);
+                    PopulateTreeView(tbFolderPath.Text, root);
                 }
             }
             catch (Exception E)
             { MessageBox.Show(LocRM.GetString("Error_PathNotFound")+": ["+tbFolderPath.Text+"]\n"+E.Message); }
         }
 
-        private void PopulateDirectoryBranch(string path, TreeNode start)
+        private void PopulateTreeView(string path, TreeNode start)
         {
-            DirectoryInfo di = new DirectoryInfo(path);
-            IEnumerable<String> dirs = di.EnumerateDirectories().OrderBy(t => t.Name).Select(t => t.Name);
-            foreach (string dir in dirs)
+            wfNode<DirInfo> root = new wfNode<DirInfo>();
+            PopulateDirectoryBranch(path, root);
+            CopyVirtualBranch(start, root);
+        }
+
+        private void CopyVirtualBranch(TreeNode start, wfNode<DirInfo> root)
+        {
+            if (root.Items.Count > 0)
             {
-                TreeNode node = start.Nodes.Add(dir);
-                PopulateDirectoryBranch(path + "\\" + dir, node);
+                foreach (wfNode<DirInfo> item in root.Items.OrderByDescending(t=>t.Value.Name))
+                {
+                    TreeNode treenode = start.Nodes.Add(item.Value.Name);
+                    CopyVirtualBranch(treenode, item);
+                }
             }
         }
+
+        private void PopulateDirectoryBranch(string path, wfNode<DirInfo> root)
+        {
+            DirectoryInfo di = new DirectoryInfo(path);
+            IEnumerable<String> dirs = di.EnumerateDirectories().Select(t => t.Name);
+            foreach (string dir in dirs)
+            {
+//                TreeNode node = start.Nodes.Add(dir);
+                wfNode<DirInfo> item = new wfNode<DirInfo>(root);
+                item.Value.Name = dir;
+                root.Items.Add(item); 
+                PopulateDirectoryBranch(path + "\\" + dir, item);
+            }
+        } 
 
     }
 }
