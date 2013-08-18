@@ -54,6 +54,7 @@ namespace wfFileInventory
             wfNode<DirInfo> root = new wfNode<DirInfo>();
             PopulateDirectoryBranch(path, root);
             CopyVirtualBranch(start, root);
+            start.Text += DirInfoToString(root.Value);
         }
 
         private void CopyVirtualBranch(TreeNode start, wfNode<DirInfo> root)
@@ -62,10 +63,17 @@ namespace wfFileInventory
             {
                 foreach (wfNode<DirInfo> item in root.Items.OrderBy(t=>t.Value.Name))
                 {
-                    TreeNode treenode = start.Nodes.Add(item.Value.Name+" ["+item.Value.TotalWeight.ToString()+"]");
+                    TreeNode treenode = start.Nodes.Add(item.Value.Name+DirInfoToString(item.Value));
                     CopyVirtualBranch(treenode, item);
                 }
             }
+        }
+
+        private string DirInfoToString(DirInfo value)
+        {
+            string _total = LocRM.GetString("Title_TotalWeight");
+            string _own = LocRM.GetString("Title_OwnWeight");
+            return String.Format(" [{0}: {1}, {2}: {3}]", _total, value.TotalWeight, _own, value.OwnWeight);
         }
 
         private void PopulateDirectoryBranch(string path, wfNode<DirInfo> root)

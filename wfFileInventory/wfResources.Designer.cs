@@ -70,11 +70,20 @@ namespace wfFileInventory {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start scanning.
+        ///   Looks up a localized string similar to Own.
         /// </summary>
-        internal static string ScanButtonCaption {
+        internal static string Title_OwnWeight {
             get {
-                return ResourceManager.GetString("ScanButtonCaption", resourceCulture);
+                return ResourceManager.GetString("Title_OwnWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total.
+        /// </summary>
+        internal static string Title_TotalWeight {
+            get {
+                return ResourceManager.GetString("Title_TotalWeight", resourceCulture);
             }
         }
     }
