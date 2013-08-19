@@ -19,6 +19,7 @@ namespace wfFileInventory
         long[] measure_units = new long[] { 1024, 1024 * 1024, 1024 * 1024 * 1024 };
         long active_measure_unit;
         wfNode<DirInfo> internal_root;
+        SortOrder current_sort_order;
         string _path;
         public fMain()
         {
@@ -26,6 +27,8 @@ namespace wfFileInventory
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
             InitializeComponent();
             cbMeasureUnit.SelectedIndex = 0;
+            current_sort_order = SortOrder.Weight;
+            rbTotalWeight.Checked = true;
         }
 
         private void bSelectFolder_Click(object sender, EventArgs e)
@@ -55,26 +58,41 @@ namespace wfFileInventory
 
         private void InitialPopulateTreeView(string path)
         {
+            tvInventory.Nodes.Clear();
             internal_root = new wfNode<DirInfo>();
+            internal_root.Value.Name = path;
             PopulateDirectoryBranch(path, internal_root);
             RepopulateTreeView(path);
         }
 
         private void RepopulateTreeView(string path)
         {
-            TreeNode start = tvInventory.Nodes.Add(path);
+            MyTreeNode start = new MyTreeNode(path);
+            tvInventory.Nodes.Add(start);
             
             CopyVirtualBranch(start, internal_root);
-            start.Text += DirInfoToString(internal_root.Value);
+            start.Text = DirInfoToString(internal_root.Value);
         }
 
-        private void CopyVirtualBranch(TreeNode start, wfNode<DirInfo> root)
+        private void CopyVirtualBranch(MyTreeNode start, wfNode<DirInfo> root)
         {
+            start.virtualNode = root;
             if (root.Items.Count > 0)
             {
-                foreach (wfNode<DirInfo> item in root.Items.OrderBy(t=>t.Value.Name))
+                IOrderedEnumerable<wfNode<DirInfo>> items;
+                if (current_sort_order == SortOrder.Alpha)
                 {
-                    TreeNode treenode = start.Nodes.Add(item.Value.Name+DirInfoToString(item.Value));
+                    items = (IOrderedEnumerable<wfNode<DirInfo>>)root.Items.OrderBy(t => t.Value.Name);
+                }
+                else
+                {
+                    items = (IOrderedEnumerable<wfNode<DirInfo>>)root.Items.OrderByDescending(t => t.Value.TotalWeight);
+                }
+
+                foreach (wfNode<DirInfo> item in items)
+                {
+                    MyTreeNode treenode = new MyTreeNode(DirInfoToString(item.Value));
+                    start.Nodes.Add(treenode);
                     CopyVirtualBranch(treenode, item);
                 }
             }
@@ -84,7 +102,7 @@ namespace wfFileInventory
         {
             string _total = LocRM.GetString("Title_TotalWeight");
             string _own = LocRM.GetString("Title_OwnWeight");
-            return String.Format(" [{0}: {1}, {2}: {3}]", _total, value.TotalWeight / active_measure_unit, _own, value.OwnWeight / active_measure_unit);
+            return String.Format("{0} [{1}: {2:N2}, {3}: {4:N2}]", value.Name, _total, (double) value.TotalWeight / active_measure_unit, _own, (double) value.OwnWeight / active_measure_unit);
         }
 
         private void PopulateDirectoryBranch(string path, wfNode<DirInfo> root)
@@ -126,9 +144,48 @@ namespace wfFileInventory
             active_measure_unit = measure_units[cbMeasureUnit.SelectedIndex];
             if (internal_root != null)
             {
+                /*
+                 * This is obsolete: now am trying to update tree visualization quickly 
+                 * and without recreating it
                 tvInventory.Nodes.Clear();
                 RepopulateTreeView(_path);
+                 */
+                UpdateAllVisibleTreeNodes((MyTreeNode)tvInventory.Nodes[0]);
             }
         }
+
+        private void UpdateAllVisibleTreeNodes(MyTreeNode root)
+        {
+            if (root.IsVisible)
+            {
+                root.Text = DirInfoToString(root.virtualNode.Value);
+            }
+            foreach (MyTreeNode node in root.Nodes)
+            {
+                UpdateAllVisibleTreeNodes(node);
+            }
+        }
+
+        private void rbTotalWeight_Click(object sender, EventArgs e)
+        {
+            SortOrder prev_sort_order = current_sort_order;
+            if (rbAlphabetically.Checked) {
+                current_sort_order = SortOrder.Alpha;
+            } else {
+                current_sort_order = SortOrder.Weight;
+            }
+            if (internal_root != null)
+            {
+
+                if (prev_sort_order != current_sort_order)
+                {
+                    tvInventory.Nodes.Clear();
+                    RepopulateTreeView(_path);
+                }
+
+            }
+        }
+
+        
     }
 }

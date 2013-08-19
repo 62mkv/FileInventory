@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace wfFileInventory
 {
@@ -24,4 +25,16 @@ namespace wfFileInventory
         public Int32 FileCount;
     }
 
+    public class MyTreeNode : TreeNode
+    {
+        public wfNode<DirInfo> virtualNode;
+        public MyTreeNode(string str) : base(str) { 
+            virtualNode = null;   
+        }
+    }
+
+    public enum SortOrder
+    {
+        Alpha = 1, Weight = 2
+    }
 }

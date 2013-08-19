@@ -38,6 +38,9 @@
             this.tvInventory = new System.Windows.Forms.TreeView();
             this.cbMeasureUnit = new System.Windows.Forms.ComboBox();
             this.lMeasureUnit = new System.Windows.Forms.Label();
+            this.lOrderBy = new System.Windows.Forms.Label();
+            this.rbAlphabetically = new System.Windows.Forms.RadioButton();
+            this.rbTotalWeight = new System.Windows.Forms.RadioButton();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -61,10 +64,6 @@
             this.bStartScan.UseVisualStyleBackColor = true;
             this.bStartScan.Click += new System.EventHandler(this.bStartScan_Click);
             // 
-            // folderBrowserDialog1
-            // 
-            resources.ApplyResources(this.folderBrowserDialog1, "folderBrowserDialog1");
-            // 
             // tabMain
             // 
             resources.ApplyResources(this.tabMain, "tabMain");
@@ -74,8 +73,8 @@
             // 
             // tabPage1
             // 
-            resources.ApplyResources(this.tabPage1, "tabPage1");
             this.tabPage1.Controls.Add(this.tvInventory);
+            resources.ApplyResources(this.tabPage1, "tabPage1");
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
@@ -101,10 +100,34 @@
             resources.ApplyResources(this.lMeasureUnit, "lMeasureUnit");
             this.lMeasureUnit.Name = "lMeasureUnit";
             // 
+            // lOrderBy
+            // 
+            resources.ApplyResources(this.lOrderBy, "lOrderBy");
+            this.lOrderBy.Name = "lOrderBy";
+            // 
+            // rbAlphabetically
+            // 
+            resources.ApplyResources(this.rbAlphabetically, "rbAlphabetically");
+            this.rbAlphabetically.Name = "rbAlphabetically";
+            this.rbAlphabetically.TabStop = true;
+            this.rbAlphabetically.UseVisualStyleBackColor = true;
+            this.rbAlphabetically.Click += new System.EventHandler(this.rbTotalWeight_Click);
+            // 
+            // rbTotalWeight
+            // 
+            resources.ApplyResources(this.rbTotalWeight, "rbTotalWeight");
+            this.rbTotalWeight.Name = "rbTotalWeight";
+            this.rbTotalWeight.TabStop = true;
+            this.rbTotalWeight.UseVisualStyleBackColor = true;
+            this.rbTotalWeight.Click += new System.EventHandler(this.rbTotalWeight_Click);
+            // 
             // fMain
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.rbTotalWeight);
+            this.Controls.Add(this.rbAlphabetically);
+            this.Controls.Add(this.lOrderBy);
             this.Controls.Add(this.lMeasureUnit);
             this.Controls.Add(this.cbMeasureUnit);
             this.Controls.Add(this.tabMain);
@@ -130,6 +153,9 @@
         private System.Windows.Forms.TreeView tvInventory;
         private System.Windows.Forms.ComboBox cbMeasureUnit;
         private System.Windows.Forms.Label lMeasureUnit;
+        private System.Windows.Forms.Label lOrderBy;
+        private System.Windows.Forms.RadioButton rbAlphabetically;
+        private System.Windows.Forms.RadioButton rbTotalWeight;
     }
 }
 
