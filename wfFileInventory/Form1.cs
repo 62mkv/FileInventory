@@ -16,11 +16,16 @@ namespace wfFileInventory
     public partial class fMain : Form
     {
         ResourceManager LocRM;
+        long[] measure_units = new long[] { 1024, 1024 * 1024, 1024 * 1024 * 1024 };
+        long active_measure_unit;
+        wfNode<DirInfo> internal_root;
+        string _path;
         public fMain()
         {
             LocRM = new ResourceManager("wfFileInventory.wfResources", typeof(fMain).Assembly);
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
             InitializeComponent();
+            cbMeasureUnit.SelectedIndex = 0;
         }
 
         private void bSelectFolder_Click(object sender, EventArgs e)
@@ -40,21 +45,27 @@ namespace wfFileInventory
                 DirectoryInfo di = new DirectoryInfo(tbFolderPath.Text);
                 if (di.Exists)
                 {
-                    TreeNode root = tvInventory.Nodes.Add(di.FullName);
-                    
-                    PopulateTreeView(tbFolderPath.Text, root);
+                    _path = tbFolderPath.Text;
+                    InitialPopulateTreeView(_path);
                 }
             }
             catch (Exception E)
             { MessageBox.Show(LocRM.GetString("Error_PathNotFound")+": ["+tbFolderPath.Text+"]\n"+E.Message); }
         }
 
-        private void PopulateTreeView(string path, TreeNode start)
+        private void InitialPopulateTreeView(string path)
         {
-            wfNode<DirInfo> root = new wfNode<DirInfo>();
-            PopulateDirectoryBranch(path, root);
-            CopyVirtualBranch(start, root);
-            start.Text += DirInfoToString(root.Value);
+            internal_root = new wfNode<DirInfo>();
+            PopulateDirectoryBranch(path, internal_root);
+            RepopulateTreeView(path);
+        }
+
+        private void RepopulateTreeView(string path)
+        {
+            TreeNode start = tvInventory.Nodes.Add(path);
+            
+            CopyVirtualBranch(start, internal_root);
+            start.Text += DirInfoToString(internal_root.Value);
         }
 
         private void CopyVirtualBranch(TreeNode start, wfNode<DirInfo> root)
@@ -73,7 +84,7 @@ namespace wfFileInventory
         {
             string _total = LocRM.GetString("Title_TotalWeight");
             string _own = LocRM.GetString("Title_OwnWeight");
-            return String.Format(" [{0}: {1}, {2}: {3}]", _total, value.TotalWeight, _own, value.OwnWeight);
+            return String.Format(" [{0}: {1}, {2}: {3}]", _total, value.TotalWeight / active_measure_unit, _own, value.OwnWeight / active_measure_unit);
         }
 
         private void PopulateDirectoryBranch(string path, wfNode<DirInfo> root)
@@ -107,6 +118,17 @@ namespace wfFileInventory
             }
             di.FileCount = _count;
             di.OwnWeight = _weight;
+        }
+
+        private void cbMeasureUnit_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Divide by "+measure_units[cbMeasureUnit.SelectedIndex]);
+            active_measure_unit = measure_units[cbMeasureUnit.SelectedIndex];
+            if (internal_root != null)
+            {
+                tvInventory.Nodes.Clear();
+                RepopulateTreeView(_path);
+            }
         }
     }
 }

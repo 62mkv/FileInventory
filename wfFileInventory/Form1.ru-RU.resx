@@ -118,11 +118,54 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="tbFolderPath.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 312</value>
+  </data>
+  <data name="bSelectFolder.Location" type="System.Drawing.Point, System.Drawing">
+    <value>424, 310</value>
+  </data>
+  <data name="bStartScan.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 339</value>
+  </data>
   <data name="bStartScan.Size" type="System.Drawing.Size, System.Drawing">
     <value>90, 23</value>
   </data>
   <data name="bStartScan.Text" xml:space="preserve">
     <value>Сканировать</value>
+  </data>
+  <data name="tabMain.Size" type="System.Drawing.Size, System.Drawing">
+    <value>456, 301</value>
+  </data>
+  <data name="tabPage1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>448, 275</value>
+  </data>
+  <data name="tabPage1.Text" xml:space="preserve">
+    <value>Сканирование</value>
+  </data>
+  <data name="tvInventory.Size" type="System.Drawing.Size, System.Drawing">
+    <value>442, 269</value>
+  </data>
+  <data name="cbMeasureUnit.Items" xml:space="preserve">
+    <value>Килобайты</value>
+  </data>
+  <data name="cbMeasureUnit.Items1" xml:space="preserve">
+    <value>Мегабайты</value>
+  </data>
+  <data name="cbMeasureUnit.Items2" xml:space="preserve">
+    <value>Гигабайты</value>
+  </data>
+  <data name="cbMeasureUnit.Location" type="System.Drawing.Point, System.Drawing">
+    <value>333, 341</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="lMeasureUnit.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="lMeasureUnit.Location" type="System.Drawing.Point, System.Drawing">
+    <value>251, 349</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>460, 367</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Инвентаризация файлов</value>
