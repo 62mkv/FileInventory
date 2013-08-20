@@ -21,6 +21,7 @@ namespace wfFileInventory
         wfNode<DirInfo> internal_root;
         SortOrder current_sort_order;
         string _path;
+        modalScanProgress modalForm;
         public fMain()
         {
             LocRM = new ResourceManager("wfFileInventory.wfResources", typeof(fMain).Assembly);
@@ -61,8 +62,13 @@ namespace wfFileInventory
             tvInventory.Nodes.Clear();
             internal_root = new wfNode<DirInfo>();
             internal_root.Value.Name = path;
-            PopulateDirectoryBranch(path, internal_root);
-            RepopulateTreeView(path);
+            BackgroundWorker bw = new BackgroundWorker();
+            if (modalForm == null) { modalForm = new modalScanProgress();}
+
+            bw.DoWork +=  ( e, a ) => PopulateDirectoryBranch(path, internal_root);
+            bw.RunWorkerCompleted += (e, a) => FinalizeScan(path);
+            bw.RunWorkerAsync();
+            modalForm.ShowDialog();
         }
 
         private void RepopulateTreeView(string path)
@@ -114,6 +120,7 @@ namespace wfFileInventory
             {
 //                TreeNode node = start.Nodes.Add(dir);
                 wfNode<DirInfo> item = new wfNode<DirInfo>(root);
+                Application.DoEvents();
                 item.Value.Name = dir;
                 string full_path = path + "\\" + dir;
                 root.Items.Add(item); 
@@ -184,6 +191,13 @@ namespace wfFileInventory
                 }
 
             }
+        }
+
+        private void FinalizeScan(string path)
+        {
+            RepopulateTreeView(path);
+            modalForm.Close();
+
         }
 
         
