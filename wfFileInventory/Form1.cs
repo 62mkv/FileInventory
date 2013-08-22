@@ -13,15 +13,20 @@ using System.Threading;
 
 namespace wfFileInventory
 {
+    /// <summary>
+    /// Main form of WinForms-application
+    /// </summary>
     public partial class fMain : Form
     {
         ResourceManager LocRM;
-        long[] measure_units = new long[] { 1024, 1024 * 1024, 1024 * 1024 * 1024 };
-        long active_measure_unit;
         wfNode<DirInfo> internal_root;
         SortOrder current_sort_order;
-        string _path;
         modalScanProgress modalForm;
+        BackgroundWorker bw;
+        string _path;
+        long[] measure_units = new long[] { 1024, 1024 * 1024, 1024 * 1024 * 1024 };
+        long active_measure_unit;
+        System.Windows.Forms.Timer timer;
         public fMain()
         {
             LocRM = new ResourceManager("wfFileInventory.wfResources", typeof(fMain).Assembly);
@@ -57,20 +62,37 @@ namespace wfFileInventory
             { MessageBox.Show(LocRM.GetString("Error_PathNotFound")+": ["+tbFolderPath.Text+"]\n"+E.Message); }
         }
 
+        // <summary>
+        // Starts actual scanning in a non-UI thread
+        // </summary>
         private void InitialPopulateTreeView(string path)
         {
             tvInventory.Nodes.Clear();
             internal_root = new wfNode<DirInfo>();
             internal_root.Value.Name = path;
-            BackgroundWorker bw = new BackgroundWorker();
+            if (bw == null) { bw = new BackgroundWorker(); }
             if (modalForm == null) { modalForm = new modalScanProgress();}
-
-            bw.DoWork +=  ( e, a ) => PopulateDirectoryBranch(path, internal_root);
+            if (timer == null) { timer = new System.Windows.Forms.Timer(); }
+            bw.WorkerReportsProgress = true;
+            bw.ProgressChanged += new ProgressChangedEventHandler(modalForm.backgroundWorker1_ProgressChanged);
+            bw.DoWork +=  ( e, a ) => PopulateDirectoryBranch(true, path, internal_root);
             bw.RunWorkerCompleted += (e, a) => FinalizeScan(path);
             bw.RunWorkerAsync();
+            timer.Interval = 100;
+            timer.Tick += (e,a) => TimerTick();
+            timer.Start();
             modalForm.ShowDialog();
+            timer.Stop();
+            //MessageBox.Show("I'm after showing modal form!");
         }
 
+        private void TimerTick()
+        {
+            modalForm.DisplayCurrentTime(DateTime.Now.ToString("HH:mm:ss tt"));
+        }
+        // <summary>
+        // Method for rebuilding TreeView by already built "virtual" Tree
+        // </summary>
         private void RepopulateTreeView(string path)
         {
             MyTreeNode start = new MyTreeNode(path);
@@ -80,6 +102,9 @@ namespace wfFileInventory
             start.Text = DirInfoToString(internal_root.Value);
         }
 
+        // <summary>
+        // Method for copying "virtual" tree branch; called recursively
+        // </summary>
         private void CopyVirtualBranch(MyTreeNode start, wfNode<DirInfo> root)
         {
             start.virtualNode = root;
@@ -104,6 +129,9 @@ namespace wfFileInventory
             }
         }
 
+        // <summary>
+        // Returns directory info as text (human readable) for TreeView nodes
+        // </summary>
         private string DirInfoToString(DirInfo value)
         {
             string _total = LocRM.GetString("Title_TotalWeight");
@@ -111,20 +139,35 @@ namespace wfFileInventory
             return String.Format("{0} [{1}: {2:N2}, {3}: {4:N2}]", value.Name, _total, (double) value.TotalWeight / active_measure_unit, _own, (double) value.OwnWeight / active_measure_unit);
         }
 
-        private void PopulateDirectoryBranch(string path, wfNode<DirInfo> root)
+
+        // <summary>
+        // Scans directory and populates virtual tree; called recursively
+        // </summary>
+        private void PopulateDirectoryBranch(bool is_top, string path, wfNode<DirInfo> root)
         {
             DirectoryInfo di = new DirectoryInfo(path);
             IEnumerable<String> dirs = di.EnumerateDirectories().Select(t => t.Name);
             InitializeDirInfo(ref root.Value, path);
+
+            int i = 0;
             foreach (string dir in dirs)
             {
 //                TreeNode node = start.Nodes.Add(dir);
+                i++;
+                this.Invoke((MethodInvoker)delegate
+                {
+                    modalForm.UpdateDirectory(path); // runs on UI thread
+                });
                 wfNode<DirInfo> item = new wfNode<DirInfo>(root);
                 Application.DoEvents();
                 item.Value.Name = dir;
                 string full_path = path + "\\" + dir;
                 root.Items.Add(item); 
-                PopulateDirectoryBranch(full_path, item);
+                PopulateDirectoryBranch(false, full_path, item);
+                if (is_top)
+                {
+                    bw.ReportProgress(i*100 / dirs.Count() );
+                }
                 root.Value.SubWeight += item.Value.TotalWeight;
             }
             root.Value.TotalWeight = root.Value.OwnWeight + root.Value.SubWeight;
@@ -197,9 +240,6 @@ namespace wfFileInventory
         {
             RepopulateTreeView(path);
             modalForm.Close();
-
         }
-
-        
     }
 }

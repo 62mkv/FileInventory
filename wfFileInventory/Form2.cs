@@ -15,5 +15,23 @@ namespace wfFileInventory
         {
             InitializeComponent();
         }
+
+        public void UpdateDirectory(string path)
+        {
+            lCurrentDirectory.Text = path;
+        }
+        
+        public void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            // The progress percentage is a property of e
+            pbScanProgress.Value = e.ProgressPercentage;
+        }
+
+        public void DisplayCurrentTime(string time)
+        {
+
+            lTimer.Text = time;
+        }
+
     }
 }

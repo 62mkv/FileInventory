@@ -6,6 +6,10 @@ using System.Windows.Forms;
 
 namespace wfFileInventory
 {
+    /// <summary>
+    /// A primitive class for constructing a tree of elements of type T
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class wfNode<T>
     {
         public T Value;
@@ -15,7 +19,9 @@ namespace wfFileInventory
         public wfNode(wfNode<T> _parent) : this () { parent = _parent; }
         public List<wfNode<T>> Items { get { return items; } }
     }
-
+    /// <summary>
+    /// Struct to represent directory information internally
+    /// </summary>
     public struct DirInfo 
     { 
         public string Name;
