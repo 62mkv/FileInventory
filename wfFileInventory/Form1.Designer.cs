@@ -41,6 +41,8 @@
             this.lOrderBy = new System.Windows.Forms.Label();
             this.rbAlphabetically = new System.Windows.Forms.RadioButton();
             this.rbTotalWeight = new System.Windows.Forms.RadioButton();
+            this.lScanLabel = new System.Windows.Forms.Label();
+            this.lScanTime = new System.Windows.Forms.Label();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -121,10 +123,22 @@
             this.rbTotalWeight.UseVisualStyleBackColor = true;
             this.rbTotalWeight.Click += new System.EventHandler(this.rbTotalWeight_Click);
             // 
+            // lScanLabel
+            // 
+            resources.ApplyResources(this.lScanLabel, "lScanLabel");
+            this.lScanLabel.Name = "lScanLabel";
+            // 
+            // lScanTime
+            // 
+            resources.ApplyResources(this.lScanTime, "lScanTime");
+            this.lScanTime.Name = "lScanTime";
+            // 
             // fMain
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lScanTime);
+            this.Controls.Add(this.lScanLabel);
             this.Controls.Add(this.rbTotalWeight);
             this.Controls.Add(this.rbAlphabetically);
             this.Controls.Add(this.lOrderBy);
@@ -156,6 +170,8 @@
         private System.Windows.Forms.Label lOrderBy;
         private System.Windows.Forms.RadioButton rbAlphabetically;
         private System.Windows.Forms.RadioButton rbTotalWeight;
+        private System.Windows.Forms.Label lScanLabel;
+        private System.Windows.Forms.Label lScanTime;
     }
 }
 

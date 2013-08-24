@@ -11,6 +11,14 @@ namespace wfFileInventory
 {
     public partial class modalScanProgress : Form
     {
+        
+        private System.Windows.Forms.Timer timer;
+        private DateTime dt0;
+        private TimeSpan _duration;
+        fMain mainForm;
+        public TimeSpan Duration { get { return _duration; } }
+        private bool cancel_pending;
+        public bool Cancel { get { return cancel_pending; } }
         public modalScanProgress()
         {
             InitializeComponent();
@@ -33,5 +41,36 @@ namespace wfFileInventory
             lTimer.Text = time;
         }
 
+        public void StartTimer(fMain caller)
+        {
+            if (timer == null)
+            {
+                timer = new System.Windows.Forms.Timer();
+                timer.Interval = 100;
+                timer.Tick += (e, a) => TimerTick();
+            }
+            mainForm = caller;
+            bStopScan.Enabled = true;
+            dt0 = DateTime.Now;
+            timer.Start();
+        }
+
+        public void StopTimer()
+        {
+            timer.Stop();
+            _duration = DateTime.Now - dt0;
+        }
+
+        private void TimerTick()
+        {
+            DateTime dt = DateTime.Now;
+            DisplayCurrentTime((dt-dt0).ToString());
+        }
+
+        private void bStopScan_Click(object sender, EventArgs e)
+        {
+            mainForm.CancelScan();
+            bStopScan.Enabled = false;
+        }
     }
 }

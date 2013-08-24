@@ -23,10 +23,10 @@ namespace wfFileInventory
         SortOrder current_sort_order;
         modalScanProgress modalForm;
         BackgroundWorker bw;
+        
         string _path;
         long[] measure_units = new long[] { 1024, 1024 * 1024, 1024 * 1024 * 1024 };
         long active_measure_unit;
-        System.Windows.Forms.Timer timer;
         public fMain()
         {
             LocRM = new ResourceManager("wfFileInventory.wfResources", typeof(fMain).Assembly);
@@ -55,7 +55,7 @@ namespace wfFileInventory
                 if (di.Exists)
                 {
                     _path = tbFolderPath.Text;
-                    InitialPopulateTreeView(_path);
+                    InitialPopulateTreeView();
                 }
             }
             catch (Exception E)
@@ -65,37 +65,41 @@ namespace wfFileInventory
         // <summary>
         // Starts actual scanning in a non-UI thread
         // </summary>
-        private void InitialPopulateTreeView(string path)
+        private void InitialPopulateTreeView()
         {
             tvInventory.Nodes.Clear();
             internal_root = new wfNode<DirInfo>();
-            internal_root.Value.Name = path;
-            if (bw == null) { bw = new BackgroundWorker(); }
-            if (modalForm == null) { modalForm = new modalScanProgress();}
-            if (timer == null) { timer = new System.Windows.Forms.Timer(); }
-            bw.WorkerReportsProgress = true;
-            bw.ProgressChanged += new ProgressChangedEventHandler(modalForm.backgroundWorker1_ProgressChanged);
-            bw.DoWork +=  ( e, a ) => PopulateDirectoryBranch(true, path, internal_root);
-            bw.RunWorkerCompleted += (e, a) => FinalizeScan(path);
+            internal_root.Value.Name = _path;
+            if (modalForm == null) { modalForm = new modalScanProgress(); } 
+            
+            if (bw == null) 
+            { 
+                bw = new BackgroundWorker();
+                bw.WorkerReportsProgress = true;
+                bw.WorkerSupportsCancellation = true;
+                bw.ProgressChanged += new ProgressChangedEventHandler(modalForm.backgroundWorker1_ProgressChanged);
+                bw.DoWork += new DoWorkEventHandler(bw_DoWorkEventHandler);
+                bw.RunWorkerCompleted += (e, a) => FinalizeScan();
+            }
+            
+            
+           
             bw.RunWorkerAsync();
-            timer.Interval = 100;
-            timer.Tick += (e,a) => TimerTick();
-            timer.Start();
+
+            modalForm.StartTimer(this);
             modalForm.ShowDialog();
-            timer.Stop();
+            
             //MessageBox.Show("I'm after showing modal form!");
         }
 
-        private void TimerTick()
-        {
-            modalForm.DisplayCurrentTime(DateTime.Now.ToString("HH:mm:ss tt"));
-        }
+        
         // <summary>
         // Method for rebuilding TreeView by already built "virtual" Tree
         // </summary>
         private void RepopulateTreeView(string path)
         {
             MyTreeNode start = new MyTreeNode(path);
+            tvInventory.Nodes.Clear();
             tvInventory.Nodes.Add(start);
             
             CopyVirtualBranch(start, internal_root);
@@ -153,6 +157,7 @@ namespace wfFileInventory
             foreach (string dir in dirs)
             {
 //                TreeNode node = start.Nodes.Add(dir);
+                if (bw.CancellationPending) { break; }
                 i++;
                 this.Invoke((MethodInvoker)delegate
                 {
@@ -226,20 +231,30 @@ namespace wfFileInventory
             }
             if (internal_root != null)
             {
-
                 if (prev_sort_order != current_sort_order)
                 {
                     tvInventory.Nodes.Clear();
                     RepopulateTreeView(_path);
                 }
-
             }
         }
 
-        private void FinalizeScan(string path)
+        private void FinalizeScan()
         {
-            RepopulateTreeView(path);
+            RepopulateTreeView(_path);
+            modalForm.StopTimer();
             modalForm.Close();
+            lScanTime.Text = modalForm.Duration.ToString();
+        }
+
+        public void CancelScan()
+        {
+            bw.CancelAsync();
+        }
+
+        private void bw_DoWorkEventHandler(object sender, DoWorkEventArgs e)
+        {
+            PopulateDirectoryBranch(true, _path, internal_root);
         }
     }
 }

@@ -54,6 +54,7 @@
             this.bStopScan.TabIndex = 1;
             this.bStopScan.Text = "Stop scanning";
             this.bStopScan.UseVisualStyleBackColor = true;
+            this.bStopScan.Click += new System.EventHandler(this.bStopScan_Click);
             // 
             // pbScanProgress
             // 
