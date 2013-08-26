@@ -20,6 +20,11 @@ namespace wfFileInventory
         public List<wfNode<T>> Items { get { return items; } }
     }
     /// <summary>
+    /// Enum for results of "read folder" operation
+    /// </summary>
+    public enum DirOpenResult { OK = 0, E_ACCESSDENIED = 1, E_HARDLINK = 2 };
+
+    /// <summary>
     /// Struct to represent directory information internally
     /// </summary>
     public struct DirInfo 
@@ -29,6 +34,7 @@ namespace wfFileInventory
         public long SubWeight;
         public long TotalWeight;
         public Int32 FileCount;
+        public DirOpenResult Result;
     }
 
     public class MyTreeNode : TreeNode

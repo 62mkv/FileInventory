@@ -127,6 +127,7 @@ namespace wfFileInventory
                 foreach (wfNode<DirInfo> item in items)
                 {
                     MyTreeNode treenode = new MyTreeNode(DirInfoToString(item.Value));
+                    treenode.ForeColor = GetColorByDirInfo(item.Value, treenode.ForeColor);
                     start.Nodes.Add(treenode);
                     CopyVirtualBranch(treenode, item);
                 }
@@ -150,32 +151,43 @@ namespace wfFileInventory
         private void PopulateDirectoryBranch(bool is_top, string path, wfNode<DirInfo> root)
         {
             DirectoryInfo di = new DirectoryInfo(path);
-            IEnumerable<String> dirs = di.EnumerateDirectories().Select(t => t.Name);
-            InitializeDirInfo(ref root.Value, path);
-
-            int i = 0;
-            foreach (string dir in dirs)
+            IEnumerable<String> dirs = null;
+            try
             {
-//                TreeNode node = start.Nodes.Add(dir);
-                if (bw.CancellationPending) { break; }
-                i++;
-                this.Invoke((MethodInvoker)delegate
-                {
-                    modalForm.UpdateDirectory(path); // runs on UI thread
-                });
-                wfNode<DirInfo> item = new wfNode<DirInfo>(root);
-                Application.DoEvents();
-                item.Value.Name = dir;
-                string full_path = path + "\\" + dir;
-                root.Items.Add(item); 
-                PopulateDirectoryBranch(false, full_path, item);
-                if (is_top)
-                {
-                    bw.ReportProgress(i*100 / dirs.Count() );
-                }
-                root.Value.SubWeight += item.Value.TotalWeight;
+                dirs = di.EnumerateDirectories().Select(t => t.Name);
+                InitializeDirInfo(ref root.Value, path);
             }
-            root.Value.TotalWeight = root.Value.OwnWeight + root.Value.SubWeight;
+            catch (UnauthorizedAccessException e)
+            {
+                root.Value.Result = DirOpenResult.E_ACCESSDENIED;
+                root.Value.TotalWeight = 0;
+            }
+            int i = 0;
+            if (dirs != null)
+            {
+                foreach (string dir in dirs)
+                {
+                    //                TreeNode node = start.Nodes.Add(dir);
+                    if (bw.CancellationPending) { break; }
+                    i++;
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        modalForm.UpdateDirectory(path); // runs on UI thread
+                    });
+                    wfNode<DirInfo> item = new wfNode<DirInfo>(root);
+                    Application.DoEvents();
+                    item.Value.Name = dir;
+                    string full_path = path + "\\" + dir;
+                    root.Items.Add(item);
+                    PopulateDirectoryBranch(false, full_path, item);
+                    if (is_top)
+                    {
+                        bw.ReportProgress(i * 100 / dirs.Count());
+                    }
+                    root.Value.SubWeight += item.Value.TotalWeight;
+                }
+                root.Value.TotalWeight = root.Value.OwnWeight + root.Value.SubWeight;
+            }
         }
 
         private void InitializeDirInfo(ref DirInfo di, string path)
@@ -191,6 +203,7 @@ namespace wfFileInventory
             }
             di.FileCount = _count;
             di.OwnWeight = _weight;
+            di.Result = DirOpenResult.OK;
         }
 
         private void cbMeasureUnit_SelectedIndexChanged(object sender, EventArgs e)
@@ -255,6 +268,19 @@ namespace wfFileInventory
         private void bw_DoWorkEventHandler(object sender, DoWorkEventArgs e)
         {
             PopulateDirectoryBranch(true, _path, internal_root);
+        }
+
+        private Color GetColorByDirInfo(DirInfo di, Color defaultColor) 
+        {
+            if (di.Result == DirOpenResult.E_ACCESSDENIED)
+            {
+                return System.Drawing.Color.DarkRed;
+            }
+            else
+            {
+                return defaultColor;
+            }
+
         }
     }
 }
