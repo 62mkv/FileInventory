@@ -151,6 +151,13 @@ namespace wfFileInventory
         private void PopulateDirectoryBranch(bool is_top, string path, wfNode<DirInfo> root)
         {
             DirectoryInfo di = new DirectoryInfo(path);
+            FileAttributes fa = File.GetAttributes(path);
+            if ((fa & FileAttributes.ReparsePoint) > 0) 
+            {
+                root.Value.Result = DirOpenResult.E_HARDLINK;
+                root.Value.TotalWeight = 0;
+                return;
+            }
             IEnumerable<String> dirs = null;
             try
             {
@@ -276,7 +283,9 @@ namespace wfFileInventory
             {
                 return System.Drawing.Color.DarkRed;
             }
-            else
+            else if (di.Result == DirOpenResult.E_HARDLINK) {
+                return System.Drawing.Color.Bisque;
+            } else 
             {
                 return defaultColor;
             }
