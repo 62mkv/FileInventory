@@ -72,5 +72,6 @@ namespace wfFileInventory
             mainForm.CancelScan();
             bStopScan.Enabled = false;
         }
+
     }
 }

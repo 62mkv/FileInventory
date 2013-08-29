@@ -120,6 +120,12 @@
   <data name="Error_PathNotFound" xml:space="preserve">
     <value>Ошибка: Путь не найден</value>
   </data>
+  <data name="LOG_AccessDenied" xml:space="preserve">
+    <value>Доступ запрещен</value>
+  </data>
+  <data name="LOG_HardLink" xml:space="preserve">
+    <value>Символьная ссылка</value>
+  </data>
   <data name="Title_OwnWeight" xml:space="preserve">
     <value>Собст. вес</value>
   </data>

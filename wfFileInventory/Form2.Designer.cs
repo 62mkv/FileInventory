@@ -78,7 +78,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(519, 104);
+            this.ClientSize = new System.Drawing.Size(519, 106);
             this.Controls.Add(this.lTimer);
             this.Controls.Add(this.pbScanProgress);
             this.Controls.Add(this.bStopScan);

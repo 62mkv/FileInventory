@@ -43,6 +43,7 @@
             this.rbTotalWeight = new System.Windows.Forms.RadioButton();
             this.lScanLabel = new System.Windows.Forms.Label();
             this.lScanTime = new System.Windows.Forms.Label();
+            this.lbLogs = new System.Windows.Forms.ListBox();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -133,10 +134,17 @@
             resources.ApplyResources(this.lScanTime, "lScanTime");
             this.lScanTime.Name = "lScanTime";
             // 
+            // lbLogs
+            // 
+            resources.ApplyResources(this.lbLogs, "lbLogs");
+            this.lbLogs.FormattingEnabled = true;
+            this.lbLogs.Name = "lbLogs";
+            // 
             // fMain
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lbLogs);
             this.Controls.Add(this.lScanTime);
             this.Controls.Add(this.lScanLabel);
             this.Controls.Add(this.rbTotalWeight);
@@ -172,6 +180,7 @@
         private System.Windows.Forms.RadioButton rbTotalWeight;
         private System.Windows.Forms.Label lScanLabel;
         private System.Windows.Forms.Label lScanTime;
+        private System.Windows.Forms.ListBox lbLogs;
     }
 }
 

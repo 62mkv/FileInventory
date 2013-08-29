@@ -81,12 +81,11 @@ namespace wfFileInventory
                 bw.DoWork += new DoWorkEventHandler(bw_DoWorkEventHandler);
                 bw.RunWorkerCompleted += (e, a) => FinalizeScan();
             }
-            
-            
-           
-            bw.RunWorkerAsync();
 
+
+            lbLogs.Items.Clear();
             modalForm.StartTimer(this);
+            bw.RunWorkerAsync();
             modalForm.ShowDialog();
             
             //MessageBox.Show("I'm after showing modal form!");
@@ -127,7 +126,7 @@ namespace wfFileInventory
                 foreach (wfNode<DirInfo> item in items)
                 {
                     MyTreeNode treenode = new MyTreeNode(DirInfoToString(item.Value));
-                    treenode.ForeColor = GetColorByDirInfo(item.Value, treenode.ForeColor);
+                    treenode.BackColor = GetColorByDirInfo(item.Value, treenode.ForeColor);
                     start.Nodes.Add(treenode);
                     CopyVirtualBranch(treenode, item);
                 }
@@ -156,6 +155,10 @@ namespace wfFileInventory
             {
                 root.Value.Result = DirOpenResult.E_HARDLINK;
                 root.Value.TotalWeight = 0;
+                this.Invoke((MethodInvoker)delegate
+                {
+                    LogFolder(LocRM.GetString("LOG_HardLink") + ": " + path); // runs on UI thread
+                });
                 return;
             }
             IEnumerable<String> dirs = null;
@@ -168,6 +171,10 @@ namespace wfFileInventory
             {
                 root.Value.Result = DirOpenResult.E_ACCESSDENIED;
                 root.Value.TotalWeight = 0;
+                this.Invoke((MethodInvoker)delegate
+                {
+                    LogFolder(LocRM.GetString("LOG_AccessDenied")+": "+path); // runs on UI thread
+                });
             }
             int i = 0;
             if (dirs != null)
@@ -281,15 +288,24 @@ namespace wfFileInventory
         {
             if (di.Result == DirOpenResult.E_ACCESSDENIED)
             {
-                return System.Drawing.Color.DarkRed;
+                return System.Drawing.Color.LightCoral;
             }
             else if (di.Result == DirOpenResult.E_HARDLINK) {
-                return System.Drawing.Color.Bisque;
+                return System.Drawing.Color.MediumTurquoise;
             } else 
             {
                 return defaultColor;
             }
 
         }
+        /// <summary>
+        /// Adds a string to a log
+        /// </summary>
+        /// <param name="str"></param>
+        public void LogFolder(string str)
+        {
+            lbLogs.Items.Add(str);
+        }
+
     }
 }

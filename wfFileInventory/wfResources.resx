@@ -120,6 +120,12 @@
   <data name="Error_PathNotFound" xml:space="preserve">
     <value>Error: Path not found</value>
   </data>
+  <data name="LOG_AccessDenied" xml:space="preserve">
+    <value>Access Denied</value>
+  </data>
+  <data name="LOG_HardLink" xml:space="preserve">
+    <value>Hard link</value>
+  </data>
   <data name="Title_OwnWeight" xml:space="preserve">
     <value>Own</value>
   </data>

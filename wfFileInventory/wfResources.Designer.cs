@@ -70,6 +70,24 @@ namespace wfFileInventory {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access Denied.
+        /// </summary>
+        internal static string LOG_AccessDenied {
+            get {
+                return ResourceManager.GetString("LOG_AccessDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hard link.
+        /// </summary>
+        internal static string LOG_HardLink {
+            get {
+                return ResourceManager.GetString("LOG_HardLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Own.
         /// </summary>
         internal static string Title_OwnWeight {
