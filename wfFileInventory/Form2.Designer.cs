@@ -31,6 +31,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(modalScanProgress));
             this.lCurrentDirectory = new System.Windows.Forms.Label();
             this.bStopScan = new System.Windows.Forms.Button();
             this.pbScanProgress = new System.Windows.Forms.ProgressBar();
@@ -39,46 +40,30 @@
             // 
             // lCurrentDirectory
             // 
-            this.lCurrentDirectory.AutoSize = true;
-            this.lCurrentDirectory.Location = new System.Drawing.Point(13, 13);
+            resources.ApplyResources(this.lCurrentDirectory, "lCurrentDirectory");
             this.lCurrentDirectory.Name = "lCurrentDirectory";
-            this.lCurrentDirectory.Size = new System.Drawing.Size(35, 13);
-            this.lCurrentDirectory.TabIndex = 0;
-            this.lCurrentDirectory.Text = "label1";
             // 
             // bStopScan
             // 
-            this.bStopScan.Location = new System.Drawing.Point(205, 69);
+            resources.ApplyResources(this.bStopScan, "bStopScan");
             this.bStopScan.Name = "bStopScan";
-            this.bStopScan.Size = new System.Drawing.Size(96, 23);
-            this.bStopScan.TabIndex = 1;
-            this.bStopScan.Text = "Stop scanning";
             this.bStopScan.UseVisualStyleBackColor = true;
             this.bStopScan.Click += new System.EventHandler(this.bStopScan_Click);
             // 
             // pbScanProgress
             // 
-            this.pbScanProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbScanProgress.Location = new System.Drawing.Point(16, 40);
+            resources.ApplyResources(this.pbScanProgress, "pbScanProgress");
             this.pbScanProgress.Name = "pbScanProgress";
-            this.pbScanProgress.Size = new System.Drawing.Size(491, 23);
-            this.pbScanProgress.TabIndex = 2;
             // 
             // lTimer
             // 
-            this.lTimer.AutoSize = true;
-            this.lTimer.Location = new System.Drawing.Point(13, 74);
+            resources.ApplyResources(this.lTimer, "lTimer");
             this.lTimer.Name = "lTimer";
-            this.lTimer.Size = new System.Drawing.Size(35, 13);
-            this.lTimer.TabIndex = 3;
-            this.lTimer.Text = "label1";
             // 
             // modalScanProgress
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(519, 106);
             this.Controls.Add(this.lTimer);
             this.Controls.Add(this.pbScanProgress);
             this.Controls.Add(this.bStopScan);
@@ -88,7 +73,6 @@
             this.MinimizeBox = false;
             this.Name = "modalScanProgress";
             this.ShowIcon = false;
-            this.Text = "Form2";
             this.ResumeLayout(false);
             this.PerformLayout();
 

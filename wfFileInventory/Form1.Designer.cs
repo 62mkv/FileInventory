@@ -32,7 +32,7 @@
             this.tbFolderPath = new System.Windows.Forms.TextBox();
             this.bSelectFolder = new System.Windows.Forms.Button();
             this.bStartScan = new System.Windows.Forms.Button();
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.dlgChooseFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tvInventory = new System.Windows.Forms.TreeView();
@@ -44,6 +44,8 @@
             this.lScanLabel = new System.Windows.Forms.Label();
             this.lScanTime = new System.Windows.Forms.Label();
             this.lbLogs = new System.Windows.Forms.ListBox();
+            this.bFileOpen = new System.Windows.Forms.Button();
+            this.dlgOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -140,10 +142,22 @@
             this.lbLogs.FormattingEnabled = true;
             this.lbLogs.Name = "lbLogs";
             // 
+            // bFileOpen
+            // 
+            resources.ApplyResources(this.bFileOpen, "bFileOpen");
+            this.bFileOpen.Name = "bFileOpen";
+            this.bFileOpen.UseVisualStyleBackColor = true;
+            this.bFileOpen.Click += new System.EventHandler(this.bFileOpen_Click);
+            // 
+            // dlgOpenFile
+            // 
+            this.dlgOpenFile.FileName = "openFileDialog1";
+            // 
             // fMain
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.bFileOpen);
             this.Controls.Add(this.lbLogs);
             this.Controls.Add(this.lScanTime);
             this.Controls.Add(this.lScanLabel);
@@ -169,7 +183,7 @@
         private System.Windows.Forms.TextBox tbFolderPath;
         private System.Windows.Forms.Button bSelectFolder;
         private System.Windows.Forms.Button bStartScan;
-        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.FolderBrowserDialog dlgChooseFolder;
         private System.Windows.Forms.TabControl tabMain;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TreeView tvInventory;
@@ -181,6 +195,8 @@
         private System.Windows.Forms.Label lScanLabel;
         private System.Windows.Forms.Label lScanTime;
         private System.Windows.Forms.ListBox lbLogs;
+        private System.Windows.Forms.Button bFileOpen;
+        private System.Windows.Forms.OpenFileDialog dlgOpenFile;
     }
 }
 

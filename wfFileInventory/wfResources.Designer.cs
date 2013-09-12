@@ -70,6 +70,15 @@ namespace wfFileInventory {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inventory Files.
+        /// </summary>
+        internal static string Inventory_Files {
+            get {
+                return ResourceManager.GetString("Inventory_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Access Denied.
         /// </summary>
         internal static string LOG_AccessDenied {

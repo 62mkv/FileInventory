@@ -120,6 +120,9 @@
   <data name="Error_PathNotFound" xml:space="preserve">
     <value>Error: Path not found</value>
   </data>
+  <data name="Inventory_Files" xml:space="preserve">
+    <value>Inventory Files</value>
+  </data>
   <data name="LOG_AccessDenied" xml:space="preserve">
     <value>Access Denied</value>
   </data>

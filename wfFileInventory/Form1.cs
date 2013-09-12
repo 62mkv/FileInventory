@@ -30,18 +30,19 @@ namespace wfFileInventory
         public fMain()
         {
             LocRM = new ResourceManager("wfFileInventory.wfResources", typeof(fMain).Assembly);
-            //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
             InitializeComponent();
             cbMeasureUnit.SelectedIndex = 0;
             current_sort_order = SortOrder.Weight;
             rbTotalWeight.Checked = true;
+            dlgOpenFile.Filter = LocRM.GetString("Inventory_Files")+" (*.fin)|*.fin";
         }
 
         private void bSelectFolder_Click(object sender, EventArgs e)
         {
-            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            if (dlgChooseFolder.ShowDialog() == DialogResult.OK)
             {
-                tbFolderPath.Text = folderBrowserDialog1.SelectedPath;
+                tbFolderPath.Text = dlgChooseFolder.SelectedPath;
             }
         }
 
@@ -305,6 +306,13 @@ namespace wfFileInventory
         public void LogFolder(string str)
         {
             lbLogs.Items.Add(str);
+        }
+
+        private void bFileOpen_Click(object sender, EventArgs e)
+        {
+            if (dlgOpenFile.ShowDialog() == DialogResult.OK ) {
+                MessageBox.Show(dlgOpenFile.FileName);           
+            }; 
         }
 
     }

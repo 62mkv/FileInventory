@@ -117,22 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Error_PathNotFound" xml:space="preserve">
-    <value>Ошибка: Путь не найден</value>
-  </data>
-  <data name="Inventory_Files" xml:space="preserve">
-    <value>Файлы описей папок</value>
-  </data>
-  <data name="LOG_AccessDenied" xml:space="preserve">
-    <value>Доступ запрещен</value>
-  </data>
-  <data name="LOG_HardLink" xml:space="preserve">
-    <value>Символьная ссылка</value>
-  </data>
-  <data name="Title_OwnWeight" xml:space="preserve">
-    <value>Собст. вес</value>
-  </data>
-  <data name="Title_TotalWeight" xml:space="preserve">
-    <value>Общ. вес</value>
+  <data name="bStopScan.Text" xml:space="preserve">
+    <value>Остановить</value>
   </data>
 </root>
