@@ -118,71 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tbFolderPath.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left, Right</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tbFolderPath.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tbFolderPath.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 268</value>
-  </data>
-  <data name="tbFolderPath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>417, 20</value>
-  </data>
-  <data name="tbFolderPath.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tbFolderPath.Name" xml:space="preserve">
-    <value>tbFolderPath</value>
-  </data>
-  <data name="&gt;&gt;tbFolderPath.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tbFolderPath.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tbFolderPath.ZOrder" xml:space="preserve">
-    <value>12</value>
-  </data>
-  <data name="bSelectFolder.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="bSelectFolder.Location" type="System.Drawing.Point, System.Drawing">
-    <value>430, 265</value>
-  </data>
-  <data name="bSelectFolder.Size" type="System.Drawing.Size, System.Drawing">
-    <value>24, 23</value>
-  </data>
-  <data name="bSelectFolder.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="bSelectFolder.Text" xml:space="preserve">
-    <value>...</value>
-  </data>
-  <data name="&gt;&gt;bSelectFolder.Name" xml:space="preserve">
-    <value>bSelectFolder</value>
-  </data>
-  <data name="&gt;&gt;bSelectFolder.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bSelectFolder.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;bSelectFolder.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
   <data name="bStartScan.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="bStartScan.Location" type="System.Drawing.Point, System.Drawing">
     <value>9, 331</value>
   </data>
   <data name="bStartScan.Size" type="System.Drawing.Size, System.Drawing">
     <value>85, 23</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="bStartScan.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
@@ -199,7 +145,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;bStartScan.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>9</value>
   </data>
   <metadata name="dlgChooseFolder.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>10, 19</value>
@@ -207,38 +153,41 @@
   <data name="tabMain.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
-  <data name="&gt;&gt;tabPage1.Name" xml:space="preserve">
+  <data name="&gt;&gt;bSelectFolder.Name" xml:space="preserve">
+    <value>bSelectFolder</value>
+  </data>
+  <data name="&gt;&gt;bSelectFolder.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSelectFolder.Parent" xml:space="preserve">
     <value>tabPage1</value>
   </data>
-  <data name="&gt;&gt;tabPage1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabPage1.Parent" xml:space="preserve">
-    <value>tabMain</value>
-  </data>
-  <data name="&gt;&gt;tabPage1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;bSelectFolder.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tabMain.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 3</value>
+  <data name="&gt;&gt;tbFolderPath.Name" xml:space="preserve">
+    <value>tbFolderPath</value>
   </data>
-  <data name="tabMain.Size" type="System.Drawing.Size, System.Drawing">
-    <value>456, 188</value>
+  <data name="&gt;&gt;tbFolderPath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tabMain.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+  <data name="&gt;&gt;tbFolderPath.Parent" xml:space="preserve">
+    <value>tabPage1</value>
   </data>
-  <data name="&gt;&gt;tabMain.Name" xml:space="preserve">
-    <value>tabMain</value>
+  <data name="&gt;&gt;tbFolderPath.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
-  <data name="&gt;&gt;tabMain.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;lbLogs.Name" xml:space="preserve">
+    <value>lbLogs</value>
   </data>
-  <data name="&gt;&gt;tabMain.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;lbLogs.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tabMain.ZOrder" xml:space="preserve">
-    <value>9</value>
+  <data name="&gt;&gt;lbLogs.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;lbLogs.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="&gt;&gt;tvInventory.Name" xml:space="preserve">
     <value>tvInventory</value>
@@ -250,7 +199,7 @@
     <value>tabPage1</value>
   </data>
   <data name="&gt;&gt;tvInventory.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>3</value>
   </data>
   <data name="tabPage1.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 22</value>
@@ -259,7 +208,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tabPage1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>448, 162</value>
+    <value>549, 261</value>
   </data>
   <data name="tabPage1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -279,14 +228,167 @@
   <data name="&gt;&gt;tabPage1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tvInventory.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="tvSavedInventory.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
+  </data>
+  <data name="tvSavedInventory.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="tvSavedInventory.Size" type="System.Drawing.Size, System.Drawing">
+    <value>543, 255</value>
+  </data>
+  <data name="tvSavedInventory.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tvSavedInventory.Name" xml:space="preserve">
+    <value>tvSavedInventory</value>
+  </data>
+  <data name="&gt;&gt;tvSavedInventory.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tvSavedInventory.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;tvSavedInventory.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tabPage2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="tabPage2.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabPage2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>549, 261</value>
+  </data>
+  <data name="tabPage2.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tabPage2.Text" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.Name" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.Parent" xml:space="preserve">
+    <value>tabMain</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabMain.Location" type="System.Drawing.Point, System.Drawing">
+    <value>2, 3</value>
+  </data>
+  <data name="tabMain.Size" type="System.Drawing.Size, System.Drawing">
+    <value>557, 287</value>
+  </data>
+  <data name="tabMain.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tabMain.Name" xml:space="preserve">
+    <value>tabMain</value>
+  </data>
+  <data name="&gt;&gt;tabMain.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabMain.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tabMain.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="bSelectFolder.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="bSelectFolder.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bSelectFolder.Location" type="System.Drawing.Point, System.Drawing">
+    <value>522, 235</value>
+  </data>
+  <data name="bSelectFolder.Size" type="System.Drawing.Size, System.Drawing">
+    <value>24, 23</value>
+  </data>
+  <data name="bSelectFolder.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="bSelectFolder.Text" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="&gt;&gt;bSelectFolder.Name" xml:space="preserve">
+    <value>bSelectFolder</value>
+  </data>
+  <data name="&gt;&gt;bSelectFolder.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSelectFolder.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;bSelectFolder.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tbFolderPath.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left, Right</value>
+  </data>
+  <data name="tbFolderPath.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tbFolderPath.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 238</value>
+  </data>
+  <data name="tbFolderPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>513, 20</value>
+  </data>
+  <data name="tbFolderPath.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="&gt;&gt;tbFolderPath.Name" xml:space="preserve">
+    <value>tbFolderPath</value>
+  </data>
+  <data name="&gt;&gt;tbFolderPath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbFolderPath.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;tbFolderPath.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lbLogs.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left, Right</value>
+  </data>
+  <data name="lbLogs.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 163</value>
+  </data>
+  <data name="lbLogs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>546, 69</value>
+  </data>
+  <data name="lbLogs.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;lbLogs.Name" xml:space="preserve">
+    <value>lbLogs</value>
+  </data>
+  <data name="&gt;&gt;lbLogs.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbLogs.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;lbLogs.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tvInventory.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="tvInventory.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
   <data name="tvInventory.Size" type="System.Drawing.Size, System.Drawing">
-    <value>442, 156</value>
+    <value>543, 156</value>
   </data>
   <data name="tvInventory.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -301,7 +403,7 @@
     <value>tabPage1</value>
   </data>
   <data name="&gt;&gt;tvInventory.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>3</value>
   </data>
   <data name="cbMeasureUnit.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -316,7 +418,7 @@
     <value>GigaBytes</value>
   </data>
   <data name="cbMeasureUnit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>333, 295</value>
+    <value>434, 295</value>
   </data>
   <data name="cbMeasureUnit.Size" type="System.Drawing.Size, System.Drawing">
     <value>121, 21</value>
@@ -334,7 +436,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbMeasureUnit.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>7</value>
   </data>
   <data name="lMeasureUnit.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -343,7 +445,7 @@
     <value>True</value>
   </data>
   <data name="lMeasureUnit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>251, 297</value>
+    <value>352, 297</value>
   </data>
   <data name="lMeasureUnit.Size" type="System.Drawing.Size, System.Drawing">
     <value>76, 13</value>
@@ -364,7 +466,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lMeasureUnit.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="lOrderBy.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -373,7 +475,7 @@
     <value>True</value>
   </data>
   <data name="lOrderBy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>251, 331</value>
+    <value>352, 331</value>
   </data>
   <data name="lOrderBy.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 13</value>
@@ -394,7 +496,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lOrderBy.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="rbAlphabetically.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -403,7 +505,7 @@
     <value>True</value>
   </data>
   <data name="rbAlphabetically.Location" type="System.Drawing.Point, System.Drawing">
-    <value>333, 317</value>
+    <value>434, 317</value>
   </data>
   <data name="rbAlphabetically.Size" type="System.Drawing.Size, System.Drawing">
     <value>89, 17</value>
@@ -424,7 +526,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;rbAlphabetically.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="rbTotalWeight.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -433,7 +535,7 @@
     <value>True</value>
   </data>
   <data name="rbTotalWeight.Location" type="System.Drawing.Point, System.Drawing">
-    <value>333, 334</value>
+    <value>434, 334</value>
   </data>
   <data name="rbTotalWeight.Size" type="System.Drawing.Size, System.Drawing">
     <value>93, 17</value>
@@ -454,7 +556,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;rbTotalWeight.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="lScanLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
@@ -484,7 +586,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lScanLabel.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="lScanTime.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
@@ -517,30 +619,6 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lScanTime.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="lbLogs.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left, Right</value>
-  </data>
-  <data name="lbLogs.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 193</value>
-  </data>
-  <data name="lbLogs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>445, 69</value>
-  </data>
-  <data name="lbLogs.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="&gt;&gt;lbLogs.Name" xml:space="preserve">
-    <value>lbLogs</value>
-  </data>
-  <data name="&gt;&gt;lbLogs.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lbLogs.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;lbLogs.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="bFileOpen.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -583,7 +661,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>460, 357</value>
+    <value>561, 357</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>File Inventory</value>

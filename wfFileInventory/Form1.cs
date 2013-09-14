@@ -10,6 +10,8 @@ using System.IO;
 using System.Resources;
 using System.Globalization;
 using System.Threading;
+using System.Text.RegularExpressions;
+
 
 namespace wfFileInventory
 {
@@ -311,8 +313,41 @@ namespace wfFileInventory
         private void bFileOpen_Click(object sender, EventArgs e)
         {
             if (dlgOpenFile.ShowDialog() == DialogResult.OK ) {
-                MessageBox.Show(dlgOpenFile.FileName);           
+                if (OpenInventory(dlgOpenFile.FileName))
+                {
+                    
+                }
             }; 
+        }
+
+        
+        private bool OpenInventory(string filename)
+        {
+            string line;
+            string res_line;
+            int counter = 0;
+            DirInfo di = new DirInfo();
+            Regex rx = new Regex(@"(\d+)\s+(\d+)\s+(.+)", RegexOptions.Compiled); 
+            StreamReader file = new System.IO.StreamReader(filename);
+            Match match;
+
+            while ((line = file.ReadLine()) != null)
+            {
+                match = rx.Match(line);
+                
+                if (match.Success)
+                {
+                    GroupCollection groups = match.Groups;
+                    di.TotalWeight = Convert.ToInt64(groups[1].ToString());
+                    di.OwnWeight = Convert.ToInt64(groups[2].ToString());
+                    di.Name = groups[3].ToString();
+                    lbLogs.Items.Add(DirInfoToString (di));
+                }
+                counter++;
+            }
+
+            file.Close();
+            return true;
         }
 
     }

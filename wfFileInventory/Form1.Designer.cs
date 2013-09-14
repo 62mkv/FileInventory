@@ -29,13 +29,15 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fMain));
-            this.tbFolderPath = new System.Windows.Forms.TextBox();
-            this.bSelectFolder = new System.Windows.Forms.Button();
             this.bStartScan = new System.Windows.Forms.Button();
             this.dlgChooseFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.bSelectFolder = new System.Windows.Forms.Button();
+            this.tbFolderPath = new System.Windows.Forms.TextBox();
+            this.lbLogs = new System.Windows.Forms.ListBox();
             this.tvInventory = new System.Windows.Forms.TreeView();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cbMeasureUnit = new System.Windows.Forms.ComboBox();
             this.lMeasureUnit = new System.Windows.Forms.Label();
             this.lOrderBy = new System.Windows.Forms.Label();
@@ -43,24 +45,13 @@
             this.rbTotalWeight = new System.Windows.Forms.RadioButton();
             this.lScanLabel = new System.Windows.Forms.Label();
             this.lScanTime = new System.Windows.Forms.Label();
-            this.lbLogs = new System.Windows.Forms.ListBox();
             this.bFileOpen = new System.Windows.Forms.Button();
             this.dlgOpenFile = new System.Windows.Forms.OpenFileDialog();
+            this.tvSavedInventory = new System.Windows.Forms.TreeView();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tbFolderPath
-            // 
-            resources.ApplyResources(this.tbFolderPath, "tbFolderPath");
-            this.tbFolderPath.Name = "tbFolderPath";
-            // 
-            // bSelectFolder
-            // 
-            resources.ApplyResources(this.bSelectFolder, "bSelectFolder");
-            this.bSelectFolder.Name = "bSelectFolder";
-            this.bSelectFolder.UseVisualStyleBackColor = true;
-            this.bSelectFolder.Click += new System.EventHandler(this.bSelectFolder_Click);
             // 
             // bStartScan
             // 
@@ -73,20 +64,49 @@
             // 
             resources.ApplyResources(this.tabMain, "tabMain");
             this.tabMain.Controls.Add(this.tabPage1);
+            this.tabMain.Controls.Add(this.tabPage2);
             this.tabMain.Name = "tabMain";
             this.tabMain.SelectedIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.bSelectFolder);
+            this.tabPage1.Controls.Add(this.tbFolderPath);
+            this.tabPage1.Controls.Add(this.lbLogs);
             this.tabPage1.Controls.Add(this.tvInventory);
             resources.ApplyResources(this.tabPage1, "tabPage1");
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // bSelectFolder
+            // 
+            resources.ApplyResources(this.bSelectFolder, "bSelectFolder");
+            this.bSelectFolder.Name = "bSelectFolder";
+            this.bSelectFolder.UseVisualStyleBackColor = true;
+            this.bSelectFolder.Click += new System.EventHandler(this.bSelectFolder_Click);
+            // 
+            // tbFolderPath
+            // 
+            resources.ApplyResources(this.tbFolderPath, "tbFolderPath");
+            this.tbFolderPath.Name = "tbFolderPath";
+            // 
+            // lbLogs
+            // 
+            resources.ApplyResources(this.lbLogs, "lbLogs");
+            this.lbLogs.FormattingEnabled = true;
+            this.lbLogs.Name = "lbLogs";
+            // 
             // tvInventory
             // 
             resources.ApplyResources(this.tvInventory, "tvInventory");
             this.tvInventory.Name = "tvInventory";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.tvSavedInventory);
+            resources.ApplyResources(this.tabPage2, "tabPage2");
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // cbMeasureUnit
             // 
@@ -136,12 +156,6 @@
             resources.ApplyResources(this.lScanTime, "lScanTime");
             this.lScanTime.Name = "lScanTime";
             // 
-            // lbLogs
-            // 
-            resources.ApplyResources(this.lbLogs, "lbLogs");
-            this.lbLogs.FormattingEnabled = true;
-            this.lbLogs.Name = "lbLogs";
-            // 
             // bFileOpen
             // 
             resources.ApplyResources(this.bFileOpen, "bFileOpen");
@@ -153,12 +167,16 @@
             // 
             this.dlgOpenFile.FileName = "openFileDialog1";
             // 
+            // tvSavedInventory
+            // 
+            resources.ApplyResources(this.tvSavedInventory, "tvSavedInventory");
+            this.tvSavedInventory.Name = "tvSavedInventory";
+            // 
             // fMain
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.bFileOpen);
-            this.Controls.Add(this.lbLogs);
             this.Controls.Add(this.lScanTime);
             this.Controls.Add(this.lScanLabel);
             this.Controls.Add(this.rbTotalWeight);
@@ -168,11 +186,11 @@
             this.Controls.Add(this.cbMeasureUnit);
             this.Controls.Add(this.tabMain);
             this.Controls.Add(this.bStartScan);
-            this.Controls.Add(this.bSelectFolder);
-            this.Controls.Add(this.tbFolderPath);
             this.Name = "fMain";
             this.tabMain.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -180,8 +198,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox tbFolderPath;
-        private System.Windows.Forms.Button bSelectFolder;
         private System.Windows.Forms.Button bStartScan;
         private System.Windows.Forms.FolderBrowserDialog dlgChooseFolder;
         private System.Windows.Forms.TabControl tabMain;
@@ -194,9 +210,13 @@
         private System.Windows.Forms.RadioButton rbTotalWeight;
         private System.Windows.Forms.Label lScanLabel;
         private System.Windows.Forms.Label lScanTime;
-        private System.Windows.Forms.ListBox lbLogs;
         private System.Windows.Forms.Button bFileOpen;
         private System.Windows.Forms.OpenFileDialog dlgOpenFile;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.ListBox lbLogs;
+        private System.Windows.Forms.Button bSelectFolder;
+        private System.Windows.Forms.TextBox tbFolderPath;
+        private System.Windows.Forms.TreeView tvSavedInventory;
     }
 }
 
