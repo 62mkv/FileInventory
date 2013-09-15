@@ -18,6 +18,7 @@ namespace wfFileInventory
         public wfNode() { items = new List<wfNode<T>>(); parent = null;}
         public wfNode(wfNode<T> _parent) : this () { parent = _parent; }
         public List<wfNode<T>> Items { get { return items; } }
+        public wfNode<T> Parent { get { return parent; } } 
     }
     /// <summary>
     /// Enum for results of "read folder" operation

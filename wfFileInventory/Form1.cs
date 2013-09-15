@@ -245,6 +245,7 @@ namespace wfFileInventory
             {
                 root.Text = DirInfoToString(root.virtualNode.Value);
             }
+            
             foreach (MyTreeNode node in root.Nodes)
             {
                 UpdateAllVisibleTreeNodes(node);
@@ -312,25 +313,35 @@ namespace wfFileInventory
 
         private void bFileOpen_Click(object sender, EventArgs e)
         {
+            string path = "";
             if (dlgOpenFile.ShowDialog() == DialogResult.OK ) {
-                if (OpenInventory(dlgOpenFile.FileName))
+                if (OpenInventory(dlgOpenFile.FileName, ref path))
                 {
-                    
+                    RepopulateTreeView(path);
                 }
             }; 
         }
 
         
-        private bool OpenInventory(string filename)
+        private bool OpenInventory(string filename, ref string path)
         {
             string line;
             string res_line;
+            string full_name;
             int counter = 0;
             DirInfo di = new DirInfo();
+            
             Regex rx = new Regex(@"(\d+)\s+(\d+)\s+(.+)", RegexOptions.Compiled); 
             StreamReader file = new System.IO.StreamReader(filename);
             Match match;
 
+            
+            internal_root = new wfNode<DirInfo>();
+            
+
+            wfNode<DirInfo> root = internal_root;
+
+            bool first_string_processing = true;
             while ((line = file.ReadLine()) != null)
             {
                 match = rx.Match(line);
@@ -340,8 +351,38 @@ namespace wfFileInventory
                     GroupCollection groups = match.Groups;
                     di.TotalWeight = Convert.ToInt64(groups[1].ToString());
                     di.OwnWeight = Convert.ToInt64(groups[2].ToString());
-                    di.Name = groups[3].ToString();
-                    lbLogs.Items.Add(DirInfoToString (di));
+                    full_name = groups[3].ToString();
+                    if (first_string_processing)
+                    {
+                        di.Name = full_name; //dir.FullName;
+                        root.Value = di;
+                        path = full_name;
+                        first_string_processing = false;
+                    }
+                    else
+                    {
+
+                        di.Name = GetFolderName(full_name);
+                        string parent_path = GetParentPath(full_name);
+                        string fp = FullPath(root);
+                        if (fp != parent_path)
+                        {
+//                            lbLogs.Items.Add("Full path for root (" + fp + ") not equal to parent path:" + parent_path);
+                        }
+                        while (root != null && fp != parent_path) 
+                        {
+                            root = root.Parent;
+                            if (root != null) { fp = FullPath(root); }
+                        }
+
+                        if (root == null) { break; }
+                        //lbLogs.Items.Add("Processing " + dir.FullName + " as a child for " + fp);
+
+                        wfNode<DirInfo> item = new wfNode<DirInfo>(root);
+                        item.Value = di;
+                        root.Items.Add(item);
+                        root = item;
+                    }
                 }
                 counter++;
             }
@@ -350,5 +391,47 @@ namespace wfFileInventory
             return true;
         }
 
+        private string FullPath(wfNode<DirInfo> node)
+        {
+            string path = "";
+            
+            while (node != null)
+            {
+                if (path.Length > 0)
+                {
+                    path = node.Value.Name + @"\" + path;
+                }
+                else
+                {
+                    path = node.Value.Name;
+                }
+                node = node.Parent;
+            }
+            if (path.Length == 2) { path += @"\"; }
+            return path;
+        }
+
+        private string ValidatedFolder(string path)
+        {
+            string res = path;
+            if (path.Length == 2 && path[1] == ':')
+            {
+                res = res + @"\";
+            }
+            return res;
+        }
+
+        private string GetFolderName(string full_name)
+        {
+            string[] components = full_name.Split('\\');
+            return components[components.Length - 1];
+        }
+
+        private string GetParentPath(string full_name)
+        {
+            string[] components = full_name.Split('\\');
+            components = components.Take(components.Length - 1).ToArray();
+            return ValidatedFolder(String.Join(@"\", components));
+        }
     }
 }
