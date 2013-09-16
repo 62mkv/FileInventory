@@ -326,19 +326,16 @@ namespace wfFileInventory
         private bool OpenInventory(string filename, ref string path)
         {
             string line;
-            string res_line;
             string full_name;
             int counter = 0;
             DirInfo di = new DirInfo();
             
             Regex rx = new Regex(@"(\d+)\s+(\d+)\s+(.+)", RegexOptions.Compiled); 
-            StreamReader file = new System.IO.StreamReader(filename);
+            StreamReader file = new System.IO.StreamReader(filename, Encoding.GetEncoding(1251));
             Match match;
-
-            
+                        
             internal_root = new wfNode<DirInfo>();
             
-
             wfNode<DirInfo> root = internal_root;
 
             bool first_string_processing = true;
