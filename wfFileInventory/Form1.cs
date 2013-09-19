@@ -23,8 +23,9 @@ namespace wfFileInventory
         SortOrder current_sort_order;
         FolderInventory fi;
         ResourceManager _LocRM;
-        
         long[] measure_units = new long[] { 1024, 1024 * 1024, 1024 * 1024 * 1024 };
+
+
         public fMain()
         {
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
@@ -33,6 +34,7 @@ namespace wfFileInventory
             current_sort_order = SortOrder.Weight;
             rbTotalWeight.Checked = true;
             _LocRM = new ResourceManager("wfFileInventory.wfResources", typeof(fMain).Assembly);
+            
             fi = new FolderInventory(this, _LocRM, tvInventory);
             fi.active_measure_unit = measure_units[cbMeasureUnit.SelectedIndex];
             dlgOpenFile.Filter = _LocRM.GetString("Inventory_Files") + " (*.fin)|*.fin";
@@ -83,24 +85,25 @@ namespace wfFileInventory
 
       if (fi != null)
             {
-                UpdateAllVisibleTreeNodes((MyTreeNode)tvInventory.Nodes[0]);
+                tvInventory.BeginUpdate();
+                UpdateAllVisibleTreeNodes((MyTreeNode)tvInventory.TopNode);
+                tvInventory.EndUpdate();
             }
         }
 
         private void UpdateAllVisibleTreeNodes(MyTreeNode root)
         {
-            if (root.IsVisible)
-            {
-                if (root.virtualNode != null)
-                {
-                    root.Text = root.virtualNode.Value.ToString(fi.active_measure_unit, _LocRM);
-                }
-            }
             
+            if (root.virtualNode != null)
+            {
+              root.Text = root.virtualNode.Value.ToString(fi.active_measure_unit, _LocRM);
+            }
+
             foreach (MyTreeNode node in root.Nodes)
             {
                 UpdateAllVisibleTreeNodes(node);
             }
+ 
         }
 
         private void rbTotalWeight_Click(object sender, EventArgs e)

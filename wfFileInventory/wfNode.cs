@@ -173,8 +173,9 @@ namespace wfFileInventory
             string path = _internal_root.Value.Name;
             MyTreeNode start = new MyTreeNode(path);
             _treeview.Nodes.Clear();
+            
             _treeview.Nodes.Add(start);
-
+            
             CopyVirtualBranch(start, _internal_root);
             start.Text = _internal_root.Value.ToString(active_measure_unit,_LocRM);
 
@@ -202,6 +203,7 @@ namespace wfFileInventory
                     MyTreeNode treenode = new MyTreeNode(item.Value.ToString(active_measure_unit, _LocRM));
                     treenode.BackColor = item.Value.GetColorByDirInfo(treenode.ForeColor);
                     start.Nodes.Add(treenode);
+                    
                     CopyVirtualBranch(treenode, item);
                 }
             }
