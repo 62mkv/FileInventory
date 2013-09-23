@@ -112,9 +112,8 @@ namespace wfFileInventory
         string _path;
         ResourceManager _LocRM;
 
-        public long active_measure_unit { get; set; }
         public SortOrder current_sort_order { get; set; }
-
+        public wfNode<DirInfo> Root { get { return _internal_root; } }
         public FolderInventory(fMain mainForm, ResourceManager locRM, TreeView treeview) 
         {
             _mainForm = mainForm;
@@ -149,10 +148,10 @@ namespace wfFileInventory
 
         private void FinalizeScan()
         {
-            RepopulateTreeView();
+            
             _modalForm.StopTimer();
             _modalForm.Close();
-            _mainForm.SetScanTime(_modalForm.Duration.ToString());
+            _modalForm.SetMainFormTime();
         }
 
         public void CancelScan()
@@ -163,50 +162,6 @@ namespace wfFileInventory
         private void bw_DoWorkEventHandler(object sender, DoWorkEventArgs e)
         {
             PopulateDirectoryBranch(true, _path, _internal_root);
-        }
-
-        // <summary>
-        // Method for rebuilding TreeView by already built "virtual" Tree
-        // </summary>
-        public void RepopulateTreeView()
-        {
-            string path = _internal_root.Value.Name;
-            MyTreeNode start = new MyTreeNode(path);
-            _treeview.Nodes.Clear();
-            
-            _treeview.Nodes.Add(start);
-            
-            CopyVirtualBranch(start, _internal_root);
-            start.Text = _internal_root.Value.ToString(active_measure_unit,_LocRM);
-
-        }
-        // <summary>
-        // Method for copying "virtual" tree branch; called recursively
-        // </summary>
-        private void CopyVirtualBranch(MyTreeNode start, wfNode<DirInfo> root)
-        {
-            start.virtualNode = root;
-            if (root.Items.Count > 0)
-            {
-                IOrderedEnumerable<wfNode<DirInfo>> items;
-                if (current_sort_order == SortOrder.Alpha)
-                {
-                    items = (IOrderedEnumerable<wfNode<DirInfo>>)root.Items.OrderBy(t => t.Value.Name);
-                }
-                else
-                {
-                    items = (IOrderedEnumerable<wfNode<DirInfo>>)root.Items.OrderByDescending(t => t.Value.TotalWeight);
-                }
-
-                foreach (wfNode<DirInfo> item in items)
-                {
-                    MyTreeNode treenode = new MyTreeNode(item.Value.ToString(active_measure_unit, _LocRM));
-                    treenode.BackColor = item.Value.GetColorByDirInfo(treenode.ForeColor);
-                    start.Nodes.Add(treenode);
-                    
-                    CopyVirtualBranch(treenode, item);
-                }
-            }
         }
 
         public bool OpenInventory(string filename)
@@ -272,6 +227,17 @@ namespace wfFileInventory
 
             file.Close();
             return true;
+        }
+
+        /// <summary>
+        /// Saves current inventory to a file 
+        /// </summary>
+        /// <param name="filename">Filename and path to save a file</param>
+        public void SaveInventory(string filename)
+        { 
+            StreamWriter file = new StreamWriter(filename, false, Encoding.GetEncoding(1251));
+            file.WriteLine(Root.Value.ToString());
+            file.Close();
         }
 
         // <summary>

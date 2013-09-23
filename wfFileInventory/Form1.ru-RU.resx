@@ -137,7 +137,7 @@
     <value>Гигабайты</value>
   </data>
   <data name="lMeasureUnit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>239, 303</value>
+    <value>340, 303</value>
   </data>
   <data name="lMeasureUnit.Size" type="System.Drawing.Size, System.Drawing">
     <value>88, 13</value>
@@ -146,7 +146,7 @@
     <value>Ед. измерения: </value>
   </data>
   <data name="lOrderBy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>239, 331</value>
+    <value>340, 331</value>
   </data>
   <data name="lOrderBy.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 13</value>
@@ -175,10 +175,16 @@
   <data name="lScanTime.Location" type="System.Drawing.Point, System.Drawing">
     <value>130, 295</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Инвентаризация файлов</value>
-  </data>
   <data name="bFileOpen.Text" xml:space="preserve">
     <value>Открыть опись</value>
+  </data>
+  <data name="bSaveInventory.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 23</value>
+  </data>
+  <data name="bSaveInventory.Text" xml:space="preserve">
+    <value>Сохранить опись</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Инвентаризация файлов</value>
   </data>
 </root>

@@ -24,7 +24,7 @@ namespace wfFileInventory
         FolderInventory fi;
         ResourceManager _LocRM;
         long[] measure_units = new long[] { 1024, 1024 * 1024, 1024 * 1024 * 1024 };
-
+        long active_measure_unit;
 
         public fMain()
         {
@@ -34,14 +34,59 @@ namespace wfFileInventory
             current_sort_order = SortOrder.Weight;
             rbTotalWeight.Checked = true;
             _LocRM = new ResourceManager("wfFileInventory.wfResources", typeof(fMain).Assembly);
-            
+            bSaveInventory.Enabled = false;
             fi = new FolderInventory(this, _LocRM, tvInventory);
-            fi.active_measure_unit = measure_units[cbMeasureUnit.SelectedIndex];
+            active_measure_unit = measure_units[cbMeasureUnit.SelectedIndex];
             dlgOpenFile.Filter = _LocRM.GetString("Inventory_Files") + " (*.fin)|*.fin";
         }
 
         public ListBox.ObjectCollection Log { get { return lbLogs.Items; } }
-    
+
+        // <summary>
+        // Method for rebuilding TreeView by already built "virtual" Tree
+        // </summary>
+        public void RepopulateTreeView()
+        {
+            wfNode<DirInfo> internal_root = fi.Root;
+            string path = internal_root.Value.Name;
+            MyTreeNode start = new MyTreeNode(path);
+            tvInventory.Nodes.Clear();
+
+            tvInventory.Nodes.Add(start);
+
+            CopyVirtualBranch(start, internal_root);
+            start.Text = internal_root.Value.ToString(active_measure_unit, _LocRM);
+
+        }
+        // <summary>
+        // Method for copying "virtual" tree branch; called recursively
+        // </summary>
+        private void CopyVirtualBranch(MyTreeNode start, wfNode<DirInfo> root)
+        {
+            start.virtualNode = root;
+            if (root.Items.Count > 0)
+            {
+                IOrderedEnumerable<wfNode<DirInfo>> items;
+                if (current_sort_order == SortOrder.Alpha)
+                {
+                    items = (IOrderedEnumerable<wfNode<DirInfo>>)root.Items.OrderBy(t => t.Value.Name);
+                }
+                else
+                {
+                    items = (IOrderedEnumerable<wfNode<DirInfo>>)root.Items.OrderByDescending(t => t.Value.TotalWeight);
+                }
+
+                foreach (wfNode<DirInfo> item in items)
+                {
+                    MyTreeNode treenode = new MyTreeNode(item.Value.ToString(active_measure_unit, _LocRM));
+                    treenode.BackColor = item.Value.GetColorByDirInfo(treenode.ForeColor);
+                    start.Nodes.Add(treenode);
+
+                    CopyVirtualBranch(treenode, item);
+                }
+            }
+        }
+
 
     
         private void bSelectFolder_Click(object sender, EventArgs e)
@@ -63,6 +108,9 @@ namespace wfFileInventory
                 {
                     string _path = tbFolderPath.Text;
                     fi.InitialPopulateTreeView(_path);
+                    RepopulateTreeView();
+                    
+                    bSaveInventory.Enabled = true;
                 }
             }
             catch (Exception E)
@@ -80,7 +128,7 @@ namespace wfFileInventory
             //MessageBox.Show("Divide by "+measure_units[cbMeasureUnit.SelectedIndex]);
             if (fi != null)
             {
-                fi.active_measure_unit = measure_units[cbMeasureUnit.SelectedIndex];
+                active_measure_unit = measure_units[cbMeasureUnit.SelectedIndex];
             }
 
       if (fi != null)
@@ -96,7 +144,7 @@ namespace wfFileInventory
             
             if (root.virtualNode != null)
             {
-              root.Text = root.virtualNode.Value.ToString(fi.active_measure_unit, _LocRM);
+              root.Text = root.virtualNode.Value.ToString(active_measure_unit, _LocRM);
             }
 
             foreach (MyTreeNode node in root.Nodes)
@@ -118,7 +166,7 @@ namespace wfFileInventory
             {
                 if (prev_sort_order != current_sort_order)
                 {
-                    fi.RepopulateTreeView();
+                    RepopulateTreeView();
                 }
             }
         }
@@ -140,14 +188,24 @@ namespace wfFileInventory
 
         private void bFileOpen_Click(object sender, EventArgs e)
         {
-            string path = "";
+            
             if (dlgOpenFile.ShowDialog() == DialogResult.OK ) {
                 if (fi.OpenInventory(dlgOpenFile.FileName))
                 {
-                    fi.RepopulateTreeView();
+                    RepopulateTreeView();
+                    bSaveInventory.Enabled = true;
                 }
             }; 
         }
+
+        private void bSaveInventory_Click(object sender, EventArgs e)
+        {
+            if (dlgSaveFile.ShowDialog() == DialogResult.OK) {
+                fi.SaveInventory(dlgSaveFile.FileName);
+            }
+
+        }
+                        
        
     }
 }

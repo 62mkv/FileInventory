@@ -38,6 +38,7 @@
             this.lbLogs = new System.Windows.Forms.ListBox();
             this.tvInventory = new System.Windows.Forms.TreeView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tvSavedInventory = new System.Windows.Forms.TreeView();
             this.cbMeasureUnit = new System.Windows.Forms.ComboBox();
             this.lMeasureUnit = new System.Windows.Forms.Label();
             this.lOrderBy = new System.Windows.Forms.Label();
@@ -47,7 +48,8 @@
             this.lScanTime = new System.Windows.Forms.Label();
             this.bFileOpen = new System.Windows.Forms.Button();
             this.dlgOpenFile = new System.Windows.Forms.OpenFileDialog();
-            this.tvSavedInventory = new System.Windows.Forms.TreeView();
+            this.bSaveInventory = new System.Windows.Forms.Button();
+            this.dlgSaveFile = new System.Windows.Forms.SaveFileDialog();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -60,6 +62,10 @@
             this.bStartScan.UseVisualStyleBackColor = true;
             this.bStartScan.Click += new System.EventHandler(this.bStartScan_Click);
             // 
+            // dlgChooseFolder
+            // 
+            resources.ApplyResources(this.dlgChooseFolder, "dlgChooseFolder");
+            // 
             // tabMain
             // 
             resources.ApplyResources(this.tabMain, "tabMain");
@@ -70,11 +76,11 @@
             // 
             // tabPage1
             // 
+            resources.ApplyResources(this.tabPage1, "tabPage1");
             this.tabPage1.Controls.Add(this.bSelectFolder);
             this.tabPage1.Controls.Add(this.tbFolderPath);
             this.tabPage1.Controls.Add(this.lbLogs);
             this.tabPage1.Controls.Add(this.tvInventory);
-            resources.ApplyResources(this.tabPage1, "tabPage1");
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
@@ -103,10 +109,15 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.tvSavedInventory);
             resources.ApplyResources(this.tabPage2, "tabPage2");
+            this.tabPage2.Controls.Add(this.tvSavedInventory);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tvSavedInventory
+            // 
+            resources.ApplyResources(this.tvSavedInventory, "tvSavedInventory");
+            this.tvSavedInventory.Name = "tvSavedInventory";
             // 
             // cbMeasureUnit
             // 
@@ -166,16 +177,24 @@
             // dlgOpenFile
             // 
             this.dlgOpenFile.FileName = "openFileDialog1";
+            resources.ApplyResources(this.dlgOpenFile, "dlgOpenFile");
             // 
-            // tvSavedInventory
+            // bSaveInventory
             // 
-            resources.ApplyResources(this.tvSavedInventory, "tvSavedInventory");
-            this.tvSavedInventory.Name = "tvSavedInventory";
+            resources.ApplyResources(this.bSaveInventory, "bSaveInventory");
+            this.bSaveInventory.Name = "bSaveInventory";
+            this.bSaveInventory.UseVisualStyleBackColor = true;
+            this.bSaveInventory.Click += new System.EventHandler(this.bSaveInventory_Click);
+            // 
+            // dlgSaveFile
+            // 
+            resources.ApplyResources(this.dlgSaveFile, "dlgSaveFile");
             // 
             // fMain
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.bSaveInventory);
             this.Controls.Add(this.bFileOpen);
             this.Controls.Add(this.lScanTime);
             this.Controls.Add(this.lScanLabel);
@@ -217,6 +236,8 @@
         private System.Windows.Forms.Button bSelectFolder;
         private System.Windows.Forms.TextBox tbFolderPath;
         private System.Windows.Forms.TreeView tvSavedInventory;
+        private System.Windows.Forms.Button bSaveInventory;
+        private System.Windows.Forms.SaveFileDialog dlgSaveFile;
     }
 }
 

@@ -16,9 +16,8 @@ namespace wfFileInventory
         private DateTime dt0;
         private TimeSpan _duration;
         fMain mainForm;
-        public TimeSpan Duration { get { return _duration; } }
-        private bool cancel_pending;
-        public bool Cancel { get { return cancel_pending; } }
+      
+        
         public modalScanProgress()
         {
             InitializeComponent();
@@ -37,9 +36,14 @@ namespace wfFileInventory
 
         public void DisplayCurrentTime(string time)
         {
-
             lTimer.Text = time;
         }
+
+        public void SetMainFormTime()
+        {
+            mainForm.SetScanTime(_duration.ToString());
+        }
+
 
         public void StartTimer(fMain caller)
         {
