@@ -61,6 +61,13 @@ namespace wfFileInventory
                (double) TotalWeight / active_measure_unit, _own, (double) OwnWeight / active_measure_unit);
         }
 
+        public string ToFileString(string parentPath)
+        {
+            string str = Name;
+            if (parentPath != "") { str = parentPath + @"\" + Name; }
+            return String.Format("{0}\t{1}\t{2}", TotalWeight, OwnWeight, str);
+        }
+
         public void InitializeDirInfo(string path)
         {
             DirectoryInfo _dirinfo = new DirectoryInfo(path);
@@ -105,61 +112,37 @@ namespace wfFileInventory
     public class FolderInventory
     {
         private TreeView _treeview;
-        wfNode<DirInfo> _internal_root;
-        fMain _mainForm;
-        modalScanProgress _modalForm;
-        BackgroundWorker _bw;
+        private wfNode<DirInfo> _internal_root;
+        private StreamWriter _file;
+        private List<string> _log;
+        //private fMain _mainForm;
+        //modalScanProgress _modalForm;
+        public List<string> Log { get { return _log; } }
         string _path;
         ResourceManager _LocRM;
+        public bool CancellationPending { get; set; }
 
         public SortOrder current_sort_order { get; set; }
         public wfNode<DirInfo> Root { get { return _internal_root; } }
+
+
         public FolderInventory(fMain mainForm, ResourceManager locRM, TreeView treeview) 
         {
-            _mainForm = mainForm;
+            //_mainForm = mainForm;
             _LocRM = locRM;
             _treeview = treeview;
+            _log = new List<string>(100);
         }
 
-        public void InitialPopulateTreeView(string path)
+        public void InitializeInventory(string path)
         {
             _path = path;
-            
             _internal_root = new wfNode<DirInfo>();
             _internal_root.Value.Name = _path;
-            if (_modalForm == null) { _modalForm = new modalScanProgress(); }
-
-            if (_bw == null)
-            {
-                _bw = new BackgroundWorker();
-                _bw.WorkerReportsProgress = true;
-                _bw.WorkerSupportsCancellation = true;
-                _bw.ProgressChanged += new ProgressChangedEventHandler(_modalForm.backgroundWorker1_ProgressChanged);
-                _bw.DoWork += new DoWorkEventHandler(bw_DoWorkEventHandler);
-                _bw.RunWorkerCompleted += (e, a) => FinalizeScan();
-            }
-            _mainForm.Log.Clear();
-            _modalForm.StartTimer(_mainForm);
-            _bw.RunWorkerAsync();
-            _modalForm.ShowDialog();
-
-            //MessageBox.Show("I'm after showing modal form!");
         }
 
-        private void FinalizeScan()
-        {
-            
-            _modalForm.StopTimer();
-            _modalForm.Close();
-            _modalForm.SetMainFormTime();
-        }
 
-        public void CancelScan()
-        {
-            _bw.CancelAsync();
-        }
-
-        private void bw_DoWorkEventHandler(object sender, DoWorkEventArgs e)
+        public void bw_DoWorkEventHandler(object sender, DoWorkEventArgs e)
         {
             PopulateDirectoryBranch(true, _path, _internal_root);
         }
@@ -235,11 +218,30 @@ namespace wfFileInventory
         /// <param name="filename">Filename and path to save a file</param>
         public void SaveInventory(string filename)
         { 
-            StreamWriter file = new StreamWriter(filename, false, Encoding.GetEncoding(1251));
-            file.WriteLine(Root.Value.ToString());
-            file.Close();
+            _file = new StreamWriter(filename, false, Encoding.GetEncoding(1251));
+            WriteInventoryPath(_internal_root,"");
+            _file.Close();
         }
 
+        /// <summary>
+        /// Recursive method to save directory to file
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="parent"></param>
+        /// <param name="file"></param>
+        private void WriteInventoryPath(wfNode<DirInfo> root, string parent)
+        {
+            _file.WriteLine(root.Value.ToFileString(parent));
+            foreach (wfNode<DirInfo> node in root.Items)
+            {
+                WriteInventoryPath(node, (parent == "" ? "" : parent+@"\") +root.Value.Name);
+            }
+        }
+
+        private void LogFolder(string str)
+        {
+            _log.Add(str);
+        }
         // <summary>
         // Scans directory and populates virtual tree; called recursively
         // </summary>
@@ -251,10 +253,13 @@ namespace wfFileInventory
             {
                 root.Value.Result = DirOpenResult.E_HARDLINK;
                 root.Value.TotalWeight = 0;
+                LogFolder(_LocRM.GetString("LOG_HardLink") + ": " + path);
+                /*
                 _mainForm.Invoke((MethodInvoker)delegate
                 {
                     _mainForm.LogFolder(_LocRM.GetString("LOG_HardLink") + ": " + path); // runs on UI thread
                 });
+                 */
                 return;
             }
             IEnumerable<String> dirs = null;
@@ -267,10 +272,13 @@ namespace wfFileInventory
             {
                 root.Value.Result = DirOpenResult.E_ACCESSDENIED;
                 root.Value.TotalWeight = 0;
-                _mainForm.Invoke((MethodInvoker)delegate
+                LogFolder(_LocRM.GetString("LOG_AccessDenied") + ": " + path); 
+/*
+ * _mainForm.Invoke((MethodInvoker)delegate
                 {
                     _mainForm.LogFolder(_LocRM.GetString("LOG_AccessDenied")+": "+path); // runs on UI thread
                 });
+ */
             }
             int i = 0;
             if (dirs != null)
@@ -278,12 +286,14 @@ namespace wfFileInventory
                 foreach (string dir in dirs)
                 {
                     //                TreeNode node = start.Nodes.Add(dir);
-                    if (_bw.CancellationPending) { break; }
+                    if (CancellationPending) { break; }
                     i++;
+                    /*
                     _modalForm.Invoke((MethodInvoker)delegate
                     {
                         _modalForm.UpdateDirectory(path); // runs on UI thread
                     });
+                     */ 
                     wfNode<DirInfo> item = new wfNode<DirInfo>(root);
                     Application.DoEvents();
                     item.Value.Name = dir;
@@ -292,7 +302,7 @@ namespace wfFileInventory
                     PopulateDirectoryBranch(false, full_path, item);
                     if (is_top)
                     {
-                        _bw.ReportProgress(i * 100 / dirs.Count());
+                        //_bw.ReportProgress(i * 100 / dirs.Count());
                     }
                     root.Value.SubWeight += item.Value.TotalWeight;
                 }
