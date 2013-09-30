@@ -27,8 +27,8 @@ namespace wfFileInventory
         FolderInventory _folder_inventory;
         ResourceManager _LocRM;
         modalScanProgress _modalForm;
-        long[] measure_units = new long[] { 1024, 1024 * 1024, 1024 * 1024 * 1024 };
-        long active_measure_unit;
+        long[] _measure_units = new long[] { 1024, 1024 * 1024, 1024 * 1024 * 1024 };
+        long _active_measure_unit;
 
         public fMain()
         {
@@ -40,7 +40,7 @@ namespace wfFileInventory
             _LocRM = new ResourceManager("wfFileInventory.wfResources", typeof(fMain).Assembly);
             bSaveInventory.Enabled = false;
             _folder_inventory = new FolderInventory(this, _LocRM, tvInventory);
-            active_measure_unit = measure_units[cbMeasureUnit.SelectedIndex];
+            _active_measure_unit = _measure_units[cbMeasureUnit.SelectedIndex];
             dlgOpenFile.Filter = _LocRM.GetString("Inventory_Files") + " (*.fin)|*.fin";
         }
 
@@ -59,13 +59,22 @@ namespace wfFileInventory
                 _bw.RunWorkerCompleted += (e, a) => FinalizeScan();
             }
             //_mainForm.Log.Clear();
-
+            _folder_inventory.ReportProgressHandler = _bw.ReportProgress;
+            _folder_inventory.UpdateDirectoryLabelHandler = UpdateDirectoryMethod;
             _bw.RunWorkerAsync();
             _modalForm.StartTimer(this);
             _modalForm.ShowDialog();
 
             //MessageBox.Show("I'm after showing modal form!");
         }
+
+        private void UpdateDirectoryMethod (string path)
+        {
+            _modalForm.Invoke((MethodInvoker)delegate
+            {
+                _modalForm.UpdateDirectory(path); // runs on UI thread
+            });
+        }        
         private void FinalizeScan()
         {
             _modalForm.StopTimer();
@@ -96,7 +105,7 @@ namespace wfFileInventory
             tvInventory.Nodes.Add(start);
 
             CopyVirtualBranch(start, internal_root);
-            start.Text = internal_root.Value.ToString(active_measure_unit, _LocRM);
+            start.Text = internal_root.Value.ToString(_active_measure_unit, _LocRM);
 
         }
         // <summary>
@@ -119,7 +128,7 @@ namespace wfFileInventory
 
                 foreach (wfNode<DirInfo> item in items)
                 {
-                    MyTreeNode treenode = new MyTreeNode(item.Value.ToString(active_measure_unit, _LocRM));
+                    MyTreeNode treenode = new MyTreeNode(item.Value.ToString(_active_measure_unit, _LocRM));
                     treenode.BackColor = item.Value.GetColorByDirInfo(treenode.ForeColor);
                     start.Nodes.Add(treenode);
 
@@ -171,7 +180,7 @@ namespace wfFileInventory
             //MessageBox.Show("Divide by "+measure_units[cbMeasureUnit.SelectedIndex]);
             if (_folder_inventory != null)
             {
-                active_measure_unit = measure_units[cbMeasureUnit.SelectedIndex];
+                _active_measure_unit = _measure_units[cbMeasureUnit.SelectedIndex];
             }
 
       if (_folder_inventory != null)
@@ -187,7 +196,7 @@ namespace wfFileInventory
             
             if (root.virtualNode != null)
             {
-              root.Text = root.virtualNode.Value.ToString(active_measure_unit, _LocRM);
+              root.Text = root.virtualNode.Value.ToString(_active_measure_unit, _LocRM);
             }
 
             foreach (MyTreeNode node in root.Nodes)

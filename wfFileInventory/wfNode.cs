@@ -109,6 +109,10 @@ namespace wfFileInventory
         }
     }
 
+    public delegate void ReportProgressCallback(int percentProgress);
+
+    public delegate void UpdateDirectoryLabelCallback (string path);
+
     public class FolderInventory
     {
         private TreeView _treeview;
@@ -121,6 +125,8 @@ namespace wfFileInventory
         string _path;
         ResourceManager _LocRM;
         public bool CancellationPending { get; set; }
+        public ReportProgressCallback ReportProgressHandler { get; set; }
+        public UpdateDirectoryLabelCallback UpdateDirectoryLabelHandler { get; set; }
 
         public SortOrder current_sort_order { get; set; }
         public wfNode<DirInfo> Root { get { return _internal_root; } }
@@ -132,6 +138,7 @@ namespace wfFileInventory
             _LocRM = locRM;
             _treeview = treeview;
             _log = new List<string>(100);
+            CancellationPending = false;
         }
 
         public void InitializeInventory(string path)
@@ -254,12 +261,6 @@ namespace wfFileInventory
                 root.Value.Result = DirOpenResult.E_HARDLINK;
                 root.Value.TotalWeight = 0;
                 LogFolder(_LocRM.GetString("LOG_HardLink") + ": " + path);
-                /*
-                _mainForm.Invoke((MethodInvoker)delegate
-                {
-                    _mainForm.LogFolder(_LocRM.GetString("LOG_HardLink") + ": " + path); // runs on UI thread
-                });
-                 */
                 return;
             }
             IEnumerable<String> dirs = null;
@@ -273,27 +274,19 @@ namespace wfFileInventory
                 root.Value.Result = DirOpenResult.E_ACCESSDENIED;
                 root.Value.TotalWeight = 0;
                 LogFolder(_LocRM.GetString("LOG_AccessDenied") + ": " + path); 
-/*
- * _mainForm.Invoke((MethodInvoker)delegate
-                {
-                    _mainForm.LogFolder(_LocRM.GetString("LOG_AccessDenied")+": "+path); // runs on UI thread
-                });
- */
-            }
+           }
             int i = 0;
             if (dirs != null)
             {
                 foreach (string dir in dirs)
                 {
-                    //                TreeNode node = start.Nodes.Add(dir);
+
                     if (CancellationPending) { break; }
                     i++;
-                    /*
-                    _modalForm.Invoke((MethodInvoker)delegate
+                    if (UpdateDirectoryLabelHandler != null)
                     {
-                        _modalForm.UpdateDirectory(path); // runs on UI thread
-                    });
-                     */ 
+                        UpdateDirectoryLabelHandler(path);
+                    }
                     wfNode<DirInfo> item = new wfNode<DirInfo>(root);
                     Application.DoEvents();
                     item.Value.Name = dir;
@@ -302,7 +295,11 @@ namespace wfFileInventory
                     PopulateDirectoryBranch(false, full_path, item);
                     if (is_top)
                     {
-                        //_bw.ReportProgress(i * 100 / dirs.Count());
+
+                        if (ReportProgressHandler != null)
+                        {
+                            ReportProgressHandler(i * 100 / dirs.Count());
+                        }
                     }
                     root.Value.SubWeight += item.Value.TotalWeight;
                 }
