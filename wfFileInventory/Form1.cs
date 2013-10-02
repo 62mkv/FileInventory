@@ -58,14 +58,13 @@ namespace wfFileInventory
                 _bw.DoWork += new DoWorkEventHandler(_folder_inventory.bw_DoWorkEventHandler);
                 _bw.RunWorkerCompleted += (e, a) => FinalizeScan();
             }
-            //_mainForm.Log.Clear();
+
             _folder_inventory.ReportProgressHandler = _bw.ReportProgress;
             _folder_inventory.UpdateDirectoryLabelHandler = UpdateDirectoryMethod;
             _bw.RunWorkerAsync();
             _modalForm.StartTimer(this);
             _modalForm.ShowDialog();
 
-            //MessageBox.Show("I'm after showing modal form!");
         }
 
         private void UpdateDirectoryMethod (string path)
@@ -97,39 +96,39 @@ namespace wfFileInventory
         // </summary>
         public void RepopulateTreeView()
         {
-            wfNode<DirInfo> internal_root = _folder_inventory.Root;
-            string path = internal_root.Value.Name;
+            FolderInventoryNode internal_root = _folder_inventory.Root;
+            string path = internal_root.Name;
             MyTreeNode start = new MyTreeNode(path);
             tvInventory.Nodes.Clear();
 
             tvInventory.Nodes.Add(start);
 
             CopyVirtualBranch(start, internal_root);
-            start.Text = internal_root.Value.ToString(_active_measure_unit, _LocRM);
+            start.Text = internal_root.ToString(_active_measure_unit, _LocRM);
 
         }
         // <summary>
         // Method for copying "virtual" tree branch; called recursively
         // </summary>
-        private void CopyVirtualBranch(MyTreeNode start, wfNode<DirInfo> root)
+        private void CopyVirtualBranch(MyTreeNode start, FolderInventoryNode root)
         {
             start.virtualNode = root;
             if (root.Items.Count > 0)
             {
-                IOrderedEnumerable<wfNode<DirInfo>> items;
+                IOrderedEnumerable<FolderInventoryNode> items;
                 if (_current_sort_order == SortOrder.Alpha)
                 {
-                    items = (IOrderedEnumerable<wfNode<DirInfo>>)root.Items.OrderBy(t => t.Value.Name);
+                    items = (IOrderedEnumerable<FolderInventoryNode>)root.Items.OrderBy(t => t.Name);
                 }
                 else
                 {
-                    items = (IOrderedEnumerable<wfNode<DirInfo>>)root.Items.OrderByDescending(t => t.Value.TotalWeight);
+                    items = (IOrderedEnumerable<FolderInventoryNode>)root.Items.OrderByDescending(t => t.TotalWeight);
                 }
 
-                foreach (wfNode<DirInfo> item in items)
+                foreach (FolderInventoryNode item in items)
                 {
-                    MyTreeNode treenode = new MyTreeNode(item.Value.ToString(_active_measure_unit, _LocRM));
-                    treenode.BackColor = item.Value.GetColorByDirInfo(treenode.ForeColor);
+                    MyTreeNode treenode = new MyTreeNode(item.ToString(_active_measure_unit, _LocRM));
+                    treenode.BackColor = item.GetColorByDirInfo(treenode.ForeColor);
                     start.Nodes.Add(treenode);
 
                     CopyVirtualBranch(treenode, item);
@@ -196,7 +195,7 @@ namespace wfFileInventory
             
             if (root.virtualNode != null)
             {
-              root.Text = root.virtualNode.Value.ToString(_active_measure_unit, _LocRM);
+              root.Text = root.virtualNode.ToString(_active_measure_unit, _LocRM);
             }
 
             foreach (MyTreeNode node in root.Nodes)
@@ -223,16 +222,6 @@ namespace wfFileInventory
             }
         }
                      
-                
-        /// <summary>
-        /// Adds a string to a log
-        /// </summary>
-        /// <param name="str"></param>
-        public void LogFolder(string str)
-        {
-            lbLogs.Items.Add(str);
-        }
-
         private void bFileOpen_Click(object sender, EventArgs e)
         {
             
@@ -240,6 +229,8 @@ namespace wfFileInventory
                 if (_folder_inventory.OpenInventory(dlgOpenFile.FileName))
                 {
                     RepopulateTreeView();
+                    lbLogs.Items.Clear();
+                    lbLogs.Items.AddRange(_folder_inventory.Log.ToArray());
                     bSaveInventory.Enabled = true;
                 }
             }; 

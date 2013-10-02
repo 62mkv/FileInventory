@@ -23,30 +23,20 @@ namespace wfFileInventory
     }
 
     /// <summary>
-    /// A primitive class for constructing a tree of elements of type T
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class wfNode<T>
-    {
-        public T Value;
-        private List<wfNode<T>> items;
-        private wfNode<T> parent;
-        public wfNode() { items = new List<wfNode<T>>(); parent = null;}
-        public wfNode(wfNode<T> _parent) : this () { parent = _parent; }
-        public List<wfNode<T>> Items { get { return items; } }
-        public wfNode<T> Parent { get { return parent; } } 
-    }
-
-    /// <summary>
     /// Enum for results of "read folder" operation
     /// </summary>
     public enum DirOpenResult { OK = 0, E_ACCESSDENIED = 1, E_HARDLINK = 2 };
 
     /// <summary>
-    /// Struct to represent directory information internally
+    /// A primitive class for constructing a tree of elements of type T
     /// </summary>
-    public struct DirInfo 
-    { 
+    /// <typeparam name="T"></typeparam>
+    public class FolderInventoryNode
+    {
+        
+        private List<FolderInventoryNode> _items;
+        private FolderInventoryNode _parent;
+
         public string Name;
         public long OwnWeight;
         public long SubWeight;
@@ -54,11 +44,18 @@ namespace wfFileInventory
         public Int32 FileCount;
         public DirOpenResult Result;
 
-        public string ToString(long active_measure_unit, ResourceManager LocRM) {
-          string _total = LocRM.GetString("Title_TotalWeight");
-          string _own = LocRM.GetString("Title_OwnWeight");
-          return String.Format("{0} [{1}: {2:N2}, {3}: {4:N2}]", Name, _total, 
-               (double) TotalWeight / active_measure_unit, _own, (double) OwnWeight / active_measure_unit);
+        public FolderInventoryNode() { _items = new List<FolderInventoryNode>(); _parent = null;}
+        public FolderInventoryNode(FolderInventoryNode parent) : this () { _parent = parent; }
+
+        public List<FolderInventoryNode> Items { get { return _items; } }
+        public FolderInventoryNode Parent { get { return _parent; } set { _parent = value;  } }
+
+        public string ToString(long active_measure_unit, ResourceManager LocRM)
+        {
+            string _total = LocRM.GetString("Title_TotalWeight");
+            string _own = LocRM.GetString("Title_OwnWeight");
+            return String.Format("{0} [{1}: {2:N2}, {3}: {4:N2}]", Name, _total,
+                 (double)TotalWeight / active_measure_unit, _own, (double)OwnWeight / active_measure_unit);
         }
 
         public string ToFileString(string parentPath)
@@ -101,9 +98,10 @@ namespace wfFileInventory
         }
     }
 
+    
     public class MyTreeNode : TreeNode
     {
-        public wfNode<DirInfo> virtualNode;
+        public FolderInventoryNode virtualNode;
         public MyTreeNode(string str) : base(str) { 
             virtualNode = null;   
         }
@@ -116,7 +114,7 @@ namespace wfFileInventory
     public class FolderInventory
     {
         private TreeView _treeview;
-        private wfNode<DirInfo> _internal_root;
+        private FolderInventoryNode _internal_root;
         private StreamWriter _file;
         private List<string> _log;
         //private fMain _mainForm;
@@ -129,7 +127,7 @@ namespace wfFileInventory
         public UpdateDirectoryLabelCallback UpdateDirectoryLabelHandler { get; set; }
 
         public SortOrder current_sort_order { get; set; }
-        public wfNode<DirInfo> Root { get { return _internal_root; } }
+        public FolderInventoryNode Root { get { return _internal_root; } }
 
 
         public FolderInventory(fMain mainForm, ResourceManager locRM, TreeView treeview) 
@@ -144,8 +142,8 @@ namespace wfFileInventory
         public void InitializeInventory(string path)
         {
             _path = path;
-            _internal_root = new wfNode<DirInfo>();
-            _internal_root.Value.Name = _path;
+            _internal_root = new FolderInventoryNode();
+            _internal_root.Name = _path;
         }
 
 
@@ -159,38 +157,39 @@ namespace wfFileInventory
             string line;
             string full_name;
             int counter = 0;
-            DirInfo di = new DirInfo();
+            
 
             Regex rx = new Regex(@"(\d+)\s+(\d+)\s+(.+)", RegexOptions.Compiled);
             StreamReader file = new System.IO.StreamReader(filename, Encoding.GetEncoding(1251));
             Match match;
 
-            _internal_root = new wfNode<DirInfo>();
+            _internal_root = new FolderInventoryNode();
 
-            wfNode<DirInfo> root = _internal_root;
+            FolderInventoryNode root = _internal_root;
 
             bool first_string_processing = true;
             while ((line = file.ReadLine()) != null)
             {
+                //_log.Add(line);
                 match = rx.Match(line);
-
+                FolderInventoryNode item = new FolderInventoryNode(root);
                 if (match.Success)
                 {
                     GroupCollection groups = match.Groups;
-                    di.TotalWeight = Convert.ToInt64(groups[1].ToString());
-                    di.OwnWeight = Convert.ToInt64(groups[2].ToString());
+                    item.TotalWeight = Convert.ToInt64(groups[1].ToString());
+                    item.OwnWeight = Convert.ToInt64(groups[2].ToString());
                     full_name = groups[3].ToString();
                     if (first_string_processing)
                     {
-                        di.Name = full_name; //dir.FullName;
-                        root.Value = di;
-                        
+                        root.Name = full_name; //dir.FullName;
+                        root.TotalWeight = item.TotalWeight;
+                        root.OwnWeight = item.OwnWeight;
                         first_string_processing = false;
                     }
                     else
                     {
 
-                        di.Name = GetFolderName(full_name);
+                        item.Name = GetFolderName(full_name);
                         string parent_path = GetParentPath(full_name);
                         string fp = FullPath(root);
                         if (fp != parent_path)
@@ -204,10 +203,7 @@ namespace wfFileInventory
                         }
 
                         if (root == null) { break; }
-                        //lbLogs.Items.Add("Processing " + dir.FullName + " as a child for " + fp);
-
-                        wfNode<DirInfo> item = new wfNode<DirInfo>(root);
-                        item.Value = di;
+                        item.Parent = root;
                         root.Items.Add(item);
                         root = item;
                     }
@@ -236,12 +232,12 @@ namespace wfFileInventory
         /// <param name="root"></param>
         /// <param name="parent"></param>
         /// <param name="file"></param>
-        private void WriteInventoryPath(wfNode<DirInfo> root, string parent)
+        private void WriteInventoryPath(FolderInventoryNode root, string parent)
         {
-            _file.WriteLine(root.Value.ToFileString(parent));
-            foreach (wfNode<DirInfo> node in root.Items)
+            _file.WriteLine(root.ToFileString(parent));
+            foreach (FolderInventoryNode node in root.Items)
             {
-                WriteInventoryPath(node, (parent == "" ? "" : parent+@"\") +root.Value.Name);
+                WriteInventoryPath(node, (parent == "" ? "" : parent+@"\") +root.Name);
             }
         }
 
@@ -252,14 +248,14 @@ namespace wfFileInventory
         // <summary>
         // Scans directory and populates virtual tree; called recursively
         // </summary>
-        private void PopulateDirectoryBranch(bool is_top, string path, wfNode<DirInfo> root)
+        private void PopulateDirectoryBranch(bool is_top, string path, FolderInventoryNode root)
         {
             DirectoryInfo di = new DirectoryInfo(path);
             FileAttributes fa = File.GetAttributes(path);
             if ((fa & FileAttributes.ReparsePoint) > 0) 
             {
-                root.Value.Result = DirOpenResult.E_HARDLINK;
-                root.Value.TotalWeight = 0;
+                root.Result = DirOpenResult.E_HARDLINK;
+                root.TotalWeight = 0;
                 LogFolder(_LocRM.GetString("LOG_HardLink") + ": " + path);
                 return;
             }
@@ -267,12 +263,12 @@ namespace wfFileInventory
             try
             {
                 dirs = di.EnumerateDirectories().Select(t => t.Name);
-                root.Value.InitializeDirInfo(path);
+                root.InitializeDirInfo(path);
             }
             catch (UnauthorizedAccessException e)
             {
-                root.Value.Result = DirOpenResult.E_ACCESSDENIED;
-                root.Value.TotalWeight = 0;
+                root.Result = DirOpenResult.E_ACCESSDENIED;
+                root.TotalWeight = 0;
                 LogFolder(_LocRM.GetString("LOG_AccessDenied") + ": " + path); 
            }
             int i = 0;
@@ -287,9 +283,9 @@ namespace wfFileInventory
                     {
                         UpdateDirectoryLabelHandler(path);
                     }
-                    wfNode<DirInfo> item = new wfNode<DirInfo>(root);
+                    FolderInventoryNode item = new FolderInventoryNode(root);
                     Application.DoEvents();
-                    item.Value.Name = dir;
+                    item.Name = dir;
                     string full_path = path + "\\" + dir;
                     root.Items.Add(item);
                     PopulateDirectoryBranch(false, full_path, item);
@@ -301,15 +297,15 @@ namespace wfFileInventory
                             ReportProgressHandler(i * 100 / dirs.Count());
                         }
                     }
-                    root.Value.SubWeight += item.Value.TotalWeight;
+                    root.SubWeight += item.TotalWeight;
                 }
-                root.Value.TotalWeight = root.Value.OwnWeight + root.Value.SubWeight;
+                root.TotalWeight = root.OwnWeight + root.SubWeight;
             }
         }
 
 
 
-        private string FullPath(wfNode<DirInfo> node)
+        static private string FullPath(FolderInventoryNode node)
         {
             string path = "";
 
@@ -317,11 +313,11 @@ namespace wfFileInventory
             {
                 if (path.Length > 0)
                 {
-                    path = node.Value.Name + @"\" + path;
+                    path = node.Name + @"\" + path;
                 }
                 else
                 {
-                    path = node.Value.Name;
+                    path = node.Name;
                 }
                 node = node.Parent;
             }
@@ -329,7 +325,7 @@ namespace wfFileInventory
             return path;
         }
 
-        private string ValidatedFolder(string path)
+        static private string ValidatedFolder(string path)
         {
             string res = path;
             if (path.Length == 2 && path[1] == ':')
@@ -339,13 +335,13 @@ namespace wfFileInventory
             return res;
         }
 
-        private string GetFolderName(string full_name)
+        static private string GetFolderName(string full_name)
         {
             string[] components = full_name.Split('\\');
             return components[components.Length - 1];
         }
 
-        private string GetParentPath(string full_name)
+        static private string GetParentPath(string full_name)
         {
             string[] components = full_name.Split('\\');
             components = components.Take(components.Length - 1).ToArray();
