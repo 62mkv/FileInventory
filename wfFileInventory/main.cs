@@ -65,7 +65,6 @@ namespace wfFileInventory
             _bw.RunWorkerAsync();
             _modalForm.StartTimer(this);
             _modalForm.ShowDialog();
-
         }
 
         private void UpdateDirectoryMethod (string path)
@@ -80,6 +79,8 @@ namespace wfFileInventory
             _modalForm.StopTimer();
             _modalForm.Close();
             _modalForm.SetMainFormTime();
+            _bw.Dispose();
+            _bw = null;
             RepopulateTreeView();
             lbLogs.Items.Clear();
             lbLogs.Items.AddRange(_folder_inventory.Log.ToArray());
