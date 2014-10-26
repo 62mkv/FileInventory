@@ -125,8 +125,7 @@ namespace wfFileInventory
         public bool CancellationPending { get; set; }
         public ReportProgressCallback ReportProgressHandler { get; set; }
         public UpdateDirectoryLabelCallback UpdateDirectoryLabelHandler { get; set; }
-
-        public SortOrder current_sort_order { get; set; }
+                
         public FolderInventoryNode Root { get { return _internal_root; } }
 
 

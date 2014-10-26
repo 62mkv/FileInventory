@@ -21,6 +21,7 @@ namespace wfFileInventory
         public modalScanProgress()
         {
             InitializeComponent();
+            ShowInTaskbar = false;
         }
 
         public void UpdateDirectory(string path)

@@ -62,10 +62,6 @@
             this.bStartScan.UseVisualStyleBackColor = true;
             this.bStartScan.Click += new System.EventHandler(this.bStartScan_Click);
             // 
-            // dlgChooseFolder
-            // 
-            resources.ApplyResources(this.dlgChooseFolder, "dlgChooseFolder");
-            // 
             // tabMain
             // 
             resources.ApplyResources(this.tabMain, "tabMain");
@@ -76,11 +72,11 @@
             // 
             // tabPage1
             // 
-            resources.ApplyResources(this.tabPage1, "tabPage1");
             this.tabPage1.Controls.Add(this.bSelectFolder);
             this.tabPage1.Controls.Add(this.tbFolderPath);
             this.tabPage1.Controls.Add(this.lbLogs);
             this.tabPage1.Controls.Add(this.tvInventory);
+            resources.ApplyResources(this.tabPage1, "tabPage1");
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
@@ -109,8 +105,8 @@
             // 
             // tabPage2
             // 
-            resources.ApplyResources(this.tabPage2, "tabPage2");
             this.tabPage2.Controls.Add(this.tvSavedInventory);
+            resources.ApplyResources(this.tabPage2, "tabPage2");
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
@@ -177,7 +173,6 @@
             // dlgOpenFile
             // 
             this.dlgOpenFile.FileName = "openFileDialog1";
-            resources.ApplyResources(this.dlgOpenFile, "dlgOpenFile");
             // 
             // bSaveInventory
             // 
@@ -185,10 +180,6 @@
             this.bSaveInventory.Name = "bSaveInventory";
             this.bSaveInventory.UseVisualStyleBackColor = true;
             this.bSaveInventory.Click += new System.EventHandler(this.bSaveInventory_Click);
-            // 
-            // dlgSaveFile
-            // 
-            resources.ApplyResources(this.dlgSaveFile, "dlgSaveFile");
             // 
             // fMain
             // 

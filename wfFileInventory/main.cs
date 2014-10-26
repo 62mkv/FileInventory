@@ -61,6 +61,7 @@ namespace wfFileInventory
 
             _folder_inventory.ReportProgressHandler = _bw.ReportProgress;
             _folder_inventory.UpdateDirectoryLabelHandler = UpdateDirectoryMethod;
+            _folder_inventory.CancellationPending = false;
             _bw.RunWorkerAsync();
             _modalForm.StartTimer(this);
             _modalForm.ShowDialog();
@@ -97,6 +98,7 @@ namespace wfFileInventory
         public void RepopulateTreeView()
         {
             FolderInventoryNode internal_root = _folder_inventory.Root;
+            if (internal_root == null) { return; }
             string path = internal_root.Name;
             MyTreeNode start = new MyTreeNode(path);
             tvInventory.Nodes.Clear();
@@ -151,7 +153,6 @@ namespace wfFileInventory
             
             try
             {
-
                 DirectoryInfo di = new DirectoryInfo(tbFolderPath.Text);
                 if (di.Exists)
                 {
@@ -192,7 +193,7 @@ namespace wfFileInventory
 
         private void UpdateAllVisibleTreeNodes(MyTreeNode root)
         {
-            
+            if (root == null) { return; }
             if (root.virtualNode != null)
             {
               root.Text = root.virtualNode.ToString(_active_measure_unit, _LocRM);
@@ -207,12 +208,8 @@ namespace wfFileInventory
 
         private void rbTotalWeight_Click(object sender, EventArgs e)
         {
-            SortOrder prev_sort_order = _folder_inventory.current_sort_order;
-            if (rbAlphabetically.Checked) {
-                _folder_inventory.current_sort_order = SortOrder.Alpha;
-            } else {
-                _folder_inventory.current_sort_order = SortOrder.Weight;
-            }
+            SortOrder prev_sort_order = _current_sort_order;
+            _current_sort_order =  rbAlphabetically.Checked ? SortOrder.Alpha : SortOrder.Weight;
             //if (internal_root != null)
             {
                 if (prev_sort_order != _current_sort_order)

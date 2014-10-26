@@ -187,4 +187,7 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Инвентаризация файлов</value>
   </data>
+  <data name="tabPage2.Text" xml:space="preserve">
+    <value>Опись</value>
+  </data>
 </root>
