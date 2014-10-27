@@ -69,10 +69,14 @@ namespace wfFileInventory
 
         private void UpdateDirectoryMethod (string path)
         {
-            _modalForm.Invoke((MethodInvoker)delegate
+            try
             {
-                _modalForm.UpdateDirectory(path); // runs on UI thread
-            });
+                _modalForm.Invoke((MethodInvoker)delegate
+                {
+                    _modalForm.UpdateDirectory(path); // runs on UI thread
+                });
+            }
+            catch { }
         }        
         private void FinalizeScan()
         {
