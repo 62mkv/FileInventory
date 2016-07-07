@@ -1,4 +1,5 @@
-﻿namespace wfFileInventory
+﻿
+namespace wfFileInventory
 {
     partial class fMain
     {
@@ -30,7 +31,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fMain));
             this.bStartScan = new System.Windows.Forms.Button();
-            this.dlgChooseFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.bSelectFolder = new System.Windows.Forms.Button();
@@ -209,7 +209,6 @@
         #endregion
 
         private System.Windows.Forms.Button bStartScan;
-        private System.Windows.Forms.FolderBrowserDialog dlgChooseFolder;
         private System.Windows.Forms.TabControl tabMain;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TreeView tvInventory;

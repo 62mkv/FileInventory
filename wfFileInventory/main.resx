@@ -147,9 +147,6 @@
   <data name="&gt;&gt;bStartScan.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
-  <metadata name="dlgChooseFolder.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>10, 19</value>
-  </metadata>
   <data name="tabMain.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
@@ -185,9 +182,6 @@
   </data>
   <data name="tbFolderPath.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left, Right</value>
-  </data>
-  <data name="tbFolderPath.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
   </data>
   <data name="tbFolderPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 238</value>
@@ -650,12 +644,6 @@
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>File Inventory</value>
-  </data>
-  <data name="&gt;&gt;dlgChooseFolder.Name" xml:space="preserve">
-    <value>dlgChooseFolder</value>
-  </data>
-  <data name="&gt;&gt;dlgChooseFolder.Type" xml:space="preserve">
-    <value>System.Windows.Forms.FolderBrowserDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dlgOpenFile.Name" xml:space="preserve">
     <value>dlgOpenFile</value>

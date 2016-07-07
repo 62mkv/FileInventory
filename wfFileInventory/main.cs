@@ -11,7 +11,7 @@ using System.Resources;
 using System.Globalization;
 using System.Threading;
 using System.Text.RegularExpressions;
-
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace wfFileInventory
 {
@@ -67,7 +67,7 @@ namespace wfFileInventory
             _modalForm.ShowDialog();
         }
 
-        private void UpdateDirectoryMethod (string path)
+        private void UpdateDirectoryMethod(string path)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace wfFileInventory
                 });
             }
             catch { }
-        }        
+        }
         private void FinalizeScan()
         {
             _modalForm.StopTimer();
@@ -144,37 +144,47 @@ namespace wfFileInventory
         }
 
 
-    
+
         private void bSelectFolder_Click(object sender, EventArgs e)
         {
-            if (dlgChooseFolder.ShowDialog() == DialogResult.OK)
+            using (var dlgChooseFolder = new CommonOpenFileDialog())
             {
-                tbFolderPath.Text = dlgChooseFolder.SelectedPath;
+                dlgChooseFolder.IsFolderPicker = true;
+                dlgChooseFolder.AllowNonFileSystemItems = true;
+                if (dlgChooseFolder.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    tbFolderPath.Text = dlgChooseFolder.FileName;
+                }
             }
         }
 
         private void bStartScan_Click(object sender, EventArgs e)
         {
-            
+            string _path = tbFolderPath.Text;
             try
             {
-                DirectoryInfo di = new DirectoryInfo(tbFolderPath.Text);
+                DirectoryInfo di = new DirectoryInfo(_path);
                 if (di.Exists)
                 {
-                    string _path = tbFolderPath.Text;
-                    if (_modalForm == null) { 
-                      _modalForm = new modalScanProgress();
-                      _progressChangeEH = new ProgressChangedEventHandler(_modalForm.backgroundWorker1_ProgressChanged);
+
+                    if (_modalForm == null)
+                    {
+                        _modalForm = new modalScanProgress();
+                        _progressChangeEH = new ProgressChangedEventHandler(_modalForm.backgroundWorker1_ProgressChanged);
                     }
-                    
+
                     InitialPopulateTreeView(_path, _progressChangeEH);
+                }
+                else
+                {
+                    MessageBox.Show(_LocRM.GetString("Error_PathDoesNotExist:") + _path);
                 }
             }
             catch (Exception E)
-            { MessageBox.Show(_LocRM.GetString("Error_PathNotFound")+": ["+tbFolderPath.Text+"]\n"+E.Message); }
+            { MessageBox.Show(_LocRM.GetString("Error_PathNotFound") + ": [" + _path + "]\n" + E.Message); }
         }
 
-       
+
         public void SetScanTime(string tm)
         {
             lScanTime.Text = tm;
@@ -188,7 +198,7 @@ namespace wfFileInventory
                 _active_measure_unit = _measure_units[cbMeasureUnit.SelectedIndex];
             }
 
-      if (_folder_inventory != null)
+            if (_folder_inventory != null)
             {
                 tvInventory.BeginUpdate();
                 UpdateAllVisibleTreeNodes((MyTreeNode)tvInventory.TopNode);
@@ -201,20 +211,20 @@ namespace wfFileInventory
             if (root == null) { return; }
             if (root.virtualNode != null)
             {
-              root.Text = root.virtualNode.ToString(_active_measure_unit, _LocRM);
+                root.Text = root.virtualNode.ToString(_active_measure_unit, _LocRM);
             }
 
             foreach (MyTreeNode node in root.Nodes)
             {
                 UpdateAllVisibleTreeNodes(node);
             }
- 
+
         }
 
         private void rbTotalWeight_Click(object sender, EventArgs e)
         {
             SortOrder prev_sort_order = _current_sort_order;
-            _current_sort_order =  rbAlphabetically.Checked ? SortOrder.Alpha : SortOrder.Weight;
+            _current_sort_order = rbAlphabetically.Checked ? SortOrder.Alpha : SortOrder.Weight;
             //if (internal_root != null)
             {
                 if (prev_sort_order != _current_sort_order)
@@ -223,11 +233,12 @@ namespace wfFileInventory
                 }
             }
         }
-                     
+
         private void bFileOpen_Click(object sender, EventArgs e)
         {
-            
-            if (dlgOpenFile.ShowDialog() == DialogResult.OK ) {
+
+            if (dlgOpenFile.ShowDialog() == DialogResult.OK)
+            {
                 if (_folder_inventory.OpenInventory(dlgOpenFile.FileName))
                 {
                     RepopulateTreeView();
@@ -235,12 +246,13 @@ namespace wfFileInventory
                     lbLogs.Items.AddRange(_folder_inventory.Log.ToArray());
                     bSaveInventory.Enabled = true;
                 }
-            }; 
+            };
         }
 
         private void bSaveInventory_Click(object sender, EventArgs e)
         {
-            if (dlgSaveFile.ShowDialog() == DialogResult.OK) {
+            if (dlgSaveFile.ShowDialog() == DialogResult.OK)
+            {
                 _folder_inventory.SaveInventory(dlgSaveFile.FileName);
             }
 
