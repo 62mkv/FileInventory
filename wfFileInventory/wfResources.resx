@@ -129,6 +129,9 @@
   <data name="LOG_HardLink" xml:space="preserve">
     <value>Hard link</value>
   </data>
+  <data name="LOG_PathTooLong" xml:space="preserve">
+    <value>Path too long</value>
+  </data>
   <data name="Title_OwnWeight" xml:space="preserve">
     <value>Own</value>
   </data>

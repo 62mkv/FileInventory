@@ -25,7 +25,7 @@ namespace wfFileInventory
     /// <summary>
     /// Enum for results of "read folder" operation
     /// </summary>
-    public enum DirOpenResult { OK = 0, E_ACCESSDENIED = 1, E_HARDLINK = 2 };
+    public enum DirOpenResult { OK = 0, E_ACCESSDENIED = 1, E_HARDLINK = 2, E_OTHER = 3 };
 
     /// <summary>
     /// A primitive class for constructing a tree of elements of type T
@@ -287,7 +287,16 @@ namespace wfFileInventory
                     item.Name = dir;
                     string full_path = path + "\\" + dir;
                     root.Items.Add(item);
-                    PopulateDirectoryBranch(false, full_path, item);
+                    try 
+                    {
+                        PopulateDirectoryBranch(false, full_path, item);
+                    }
+                    catch (PathTooLongException e)
+                    {
+                        root.Result = DirOpenResult.E_OTHER;
+                        root.TotalWeight = 0;
+                        LogFolder(_LocRM.GetString("LOG_PathTooLong") + ": " + path);
+                    }
                     if (is_top)
                     {
 
